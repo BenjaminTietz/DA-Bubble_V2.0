@@ -1,0 +1,146 @@
+<div
+  class="new-message-wrapper"
+  [ngClass]="{
+    'border-radius-unset': this.communicationService.isMobileViewActive,
+    'svh-minus-header': this.communicationService.isMobileViewActive
+  }"
+>
+  <div class="new-message-top">
+    <h1>Neue Nachricht</h1>
+    <form class="searchbar-container" [formGroup]="searchText">
+      <input
+        class="searchbar"
+        type="text"
+        placeholder="An: #channel oder @jemanden oder E-Mail Adresse"
+        formControlName="search"
+        (input)="this.handleSearch()"
+        (click)="this.handleFocus()"
+      />
+
+      <!--selected Reciver-->
+      <div class="show-selected-users">
+        @for (user of this.searchService.selectedUser; track user; let index = $index) {
+          <div class="pointer added-data" (click)="removeSelectedUser(user)">
+            <img [src]="this.firebaseService.getUserAvatar(user)" alt="profile-pic" />
+            <span>{{ this.firebaseService.getUserDisplayName(user) }}</span>
+            <div class="remove-user">
+              <img src="assets/img/icons/close_black.png" alt="close-icon" />
+            </div>
+          </div>
+        }
+      </div>
+
+      <!--selected Channel-->
+      @if (this.searchService.selectedChannel) {
+        <div class="show-selected-channel">
+          <div class="pointer added-data added-data-channel" (click)="removeSelectedChannel()">
+            <span>{{ this.firebaseService.getChannelNameById(this.searchService.selectedChannel) }}</span>
+            <div class="remove">
+              <img src="assets/img/icons/close_black.png" alt="close-icon" />
+            </div>
+          </div>
+        </div>
+      }
+    </form>
+
+    <!-- onFocus -->
+    @if (isFocusActive) {
+      <div class="search-results shadow">
+        <div class="close-btn pointer" (click)="this.handleFocus()">
+          <img src="assets/img/icons/close_black.png" alt="" />
+        </div>
+        <h3>Users:</h3>
+        @for (user of this.firebaseService.userList; track user; let index = $index) {
+          @if (index < 5 && user.userId !== this.firebaseService.currentUserId) {
+            <div class="member-container pointer mb-8 width100 jc-unset" (click)="handleClickOnUser(user.userId)">
+              <div class="user-avatar">
+                <img [src]="this.firebaseService.getUserAvatar(user.userId)" alt="User Avatar" />
+                <div
+                  class="user-status"
+                  [ngClass]="{
+                    online: this.firebaseService.getUserOnlineStatus(user.userId),
+                    offline: !this.firebaseService.getUserOnlineStatus(user.userId)
+                  }"
+                ></div>
+              </div>
+              <span>{{ this.firebaseService.getUserDisplayName(user.userId) }}</span>
+            </div>
+          }
+        }
+        <h3>Channels:</h3>
+        @for (channel of this.firebaseService.channelList; track channel; let index = $index) {
+          <div class="content-container pointer" (click)="handleClickOnChannel(channel.chanId)">
+            <span>{{ "#" + channel.name }}</span>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Search results -->
+    @if ((!isFocusActive && this.showUsers) || this.showChannels || this.showUsersByEmail) {
+      <div class="search-results shadow">
+        <!--user search results by name-->
+        @if (showUsers && this.searchInput.length > 0 && this.searchService.userSearchResults.length > 0) {
+          <h3>Users:</h3>
+          @for (userId of this.searchService.userSearchResults; track userId; let index = $index) {
+            @if (index < 5 && userId !== this.firebaseService.currentUserId) {
+              <div class="member-container pointer mb-8 width100 jc-unset" (click)="handleClickOnUser(userId)">
+                <div class="user-avatar">
+                  <img [src]="this.firebaseService.getUserAvatar(userId)" alt="User Avatar" />
+                  <div
+                    class="user-status"
+                    [ngClass]="{
+                      online: this.firebaseService.getUserOnlineStatus(userId),
+                      offline: !this.firebaseService.getUserOnlineStatus(userId)
+                    }"
+                  ></div>
+                </div>
+                <span>{{ this.firebaseService.getUserDisplayName(userId) }}</span>
+              </div>
+            }
+          }
+        }
+        <!--user search results by email-->
+        @if (showUsersByEmail && this.searchInput.length > 0 && this.searchService.userSearchResults.length > 0) {
+          <h3>Users:</h3>
+          @for (userId of this.searchService.userSearchResults; track userId; let index = $index) {
+            @if (index < 5 && userId !== this.firebaseService.currentUserId) {
+              <div class="member-container pointer mb-8 width100 jc-unset" (click)="handleClickOnUser(userId)">
+                <div class="user-avatar">
+                  <img [src]="this.firebaseService.getUserAvatar(userId)" alt="User Avatar" />
+                  <div
+                    class="user-status"
+                    [ngClass]="{
+                      online: this.firebaseService.getUserOnlineStatus(userId),
+                      offline: !this.firebaseService.getUserOnlineStatus(userId)
+                    }"
+                  ></div>
+                </div>
+                <span>{{ this.firebaseService.getUserDisplayName(userId) }}</span>
+              </div>
+            }
+          }
+        } @else if (!this.searchService.userSearchResults.length && !this.showChannels && this.searchText.value) {
+          <h3>Es wurde kein Nutzer gefunden.</h3>
+        }
+        <!--channel search results-->
+        @if (showChannels && this.searchInput.length > 0 && this.searchService.channelSearchResults.length > 0) {
+          <h3>Channels:</h3>
+          @for (channel of this.searchService.channelSearchResults; track channel; let index = $index) {
+            <div class="content-container pointer" (click)="handleClickOnChannel(channel)">
+              <span routerLinkActive="router-link-active"
+                >#{{ this.firebaseService.getChannelNameById(channel) }}
+              </span>
+            </div>
+          }
+        } @else if (!this.searchService.channelSearchResults.length && this.showChannels && this.searchText.value) {
+          <h3>Es wurde kein Channel gefunden.</h3>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="chat-input">
+    <app-chat-input labelId="newMsg" (messageEvent)="onMessageSent($event)"></app-chat-input>
+  </div>
+</div>

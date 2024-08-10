@@ -1,0 +1,189 @@
+@import './../../../../styles.scss';
+
+:host {
+  @include dFlex();
+  flex-direction: column;
+  gap: 32px;
+  max-width: 500px;
+}
+
+h1 {
+  @include Nunito(700, 46px, 55.2px, $purple-1);
+}
+
+h2 {
+  @include Nunito(700, 32px, 43.65px, $black);
+  text-align: center;
+}
+
+form {
+  @include dFlex();
+  flex-direction: column;
+  gap: 32px;
+}
+
+.avatar-preview {
+  @include dFlex($fd: column);
+  gap: 32px;
+  img {
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+  }
+}
+
+.select-avatar-from-list {
+  @include dFlex($fd: column, $ai: flex-start);
+  gap: 16px;
+  span {
+    @include Nunito(400, 20px, 27.28px, $black);
+  }
+}
+
+.avatar-list {
+  @include dFlex();
+  gap: 8px;
+  .input-box {
+    width: 72px;
+    height: 72px;
+    label {
+      cursor: pointer;
+      img {
+        width: 64px;
+        margin: 4px;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+input {
+  display: none;
+}
+
+.upload-image {
+  @include dFlex($jc: flex-start);
+  gap: 24px;
+  width: 100%;
+  span {
+    @include Nunito(400, 20px, 27.28px, $black);
+  }
+}
+
+.submit-button-box {
+  @include dFlex($jc: flex-end);
+  width: 100%;
+}
+
+.button-wrap {
+  @include dFlex();
+  .button-blue {
+    @include buttonBlue();
+  }
+  .button-white {
+    @include buttonWhite();
+  }
+}
+
+.back-button {
+  @include dFlex();
+  position: absolute;
+  top: 53px;
+  left: 40px;
+  background-color: transparent;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: all 0.1s;
+  &:hover {
+    cursor: pointer;
+    background-color: $bg-color;
+    img {
+      filter: invert(38%) sepia(54%) saturate(4920%) hue-rotate(227deg) brightness(95%) contrast(98%);
+    }
+  }
+  img {
+    transition: all 0.1s;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  :host {
+    max-width: 100%;
+    gap: 22px;
+  }
+
+  h1 {
+    font-size: 32px;
+    line-height: normal;
+  }
+
+  .back-button {
+    top: 36px;
+    left: 28px;
+  }
+
+  h2 {
+    font-size: 14px;
+    line-height: normal;
+  }
+
+  form {
+    gap: 22px;
+  }
+
+  .avatar-preview {
+    gap: 22px;
+    img {
+      width: 116px;
+      height: 116px;
+      border-radius: 50%;
+    }
+  }
+
+  .select-avatar-from-list {
+    gap: 11px;
+    span {
+      font-size: 14px;
+    }
+  }
+
+  .avatar-list {
+    @include dFlex($jc: flex-start);
+    flex-wrap: wrap;
+    .input-box {
+      width: 50px;
+      height: 50px;
+      label {
+        img {
+          width: 45px;
+        }
+      }
+    }
+  }
+
+  .upload-image {
+    gap: 16px;
+    span {
+      font-size: 14px;
+    }
+  }
+
+  .button-wrap {
+    .button-blue {
+      font-size: 12px;
+      padding: 8px 18px;
+    }
+    .button-white {
+      font-size: 12px;
+      padding: 8px 18px;
+    }
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .upload-image {
+    @include dFlex($fd: column, $ai: flex-start);
+  }
+}

@@ -1,0 +1,12 @@
+@for (channel of firebaseService.channelList; track channel.chanId; let index = $index) {
+  <div class="channel-list">
+    <span
+      class="pointer"
+      [routerLink]="['/home/channels', channel.chanId]"
+      [ngClass]="{ active: this.chatService.docRef === channel.chanId }"
+      (click)="this.handleChannelClick(channel.chanId)"
+    >
+      # {{ channel.name }}
+    </span>
+  </div>
+}

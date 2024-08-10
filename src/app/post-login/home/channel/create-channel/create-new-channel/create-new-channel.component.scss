@@ -1,0 +1,158 @@
+@import '../../../../../../styles.scss';
+
+.create-new-channel-form-wrapper {
+  @include dFlex(column, flex-start, flex-start);
+
+  max-width: 872px;
+  min-height: 514px;
+  height: fit-content;
+  background-color: $white;
+  border-radius: 30px;
+  padding: 40px;
+  gap: 20px;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  span {
+    @include Nunito(400, 18px, 24.55px, $black);
+  }
+
+  .top-section {
+    @include dFlex(row, space-between, center);
+    width: 100%;
+
+    h1 {
+      @include Nunito(700, 24px, 32.74px, $black);
+    }
+  }
+
+  .create-channel-form {
+    @include dFlex(column, flex-start, flex-start);
+    width: 100%;
+    gap: 20px;
+    position: relative;
+
+    button {
+      margin-top: 24px;
+    }
+  }
+
+  .error-msg {
+    @include Nunito(400, 14px, 19.09px, red);
+    position: absolute;
+    bottom: 72px;
+    text-align: center;
+  }
+}
+
+.submit-btn-container {
+  @include dFlex(column, flex-end, center);
+  width: 100%;
+  gap: 20px;
+
+  span {
+    @include Nunito(400, 14px, 19.09px, red);
+  }
+}
+
+.add-member-wrapper {
+  @include dFlex(column, flex-start, flex-start);
+  max-width: 872px;
+  min-height: 514px;
+  height: fit-content;
+
+  background-color: $white;
+  border-radius: 30px;
+  padding: 40px;
+  gap: 20px;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  .top-section {
+    @include dFlex(row, space-between, center);
+    width: 100%;
+
+    h1 {
+      @include Nunito(700, 24px, 32.74px, $black);
+    }
+  }
+
+  .add-member-container {
+    @include dFlex(column, flex-start, flex-start);
+    width: 100%;
+    gap: 24px;
+    position: relative;
+
+    .selector-container {
+      @include dFlex(row, flex-start, center);
+      width: 100%;
+      gap: 24px;
+      transition: ease-in-out 0.1s;
+
+      span {
+        @include Nunito(400, 18px, 24.55px, $black);
+        width: calc(100% - 30px);
+      }
+
+      .checkbox-outside {
+        @include dFlex(column, center, center);
+        width: 20px;
+        height: 20px;
+        border: solid 1px $light-purple-lines;
+        border-radius: 50%;
+        transition: ease-in-out 0.1s;
+
+        &:hover {
+          border: solid 2px $purple-1;
+          background-color: $bg-color;
+        }
+
+        .checkbox-inside {
+          @include dFlex(column, center, center);
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background-color: $purple-1;
+        }
+      }
+    }
+
+    .searchbar-container {
+      @include dFlex(row, flex-start, center);
+      width: 100%;
+      gap: 24px;
+      position: relative;
+
+      span {
+        @include Nunito(400, 18px, 24.55px, $black);
+      }
+
+      .user-list {
+        position: absolute;
+        top: 60px;
+        left: 0;
+      }
+
+      .channel-list {
+        position: absolute;
+        top: 60px;
+        left: 0;
+      }
+    }
+  }
+}
+
+input {
+  @include inputField();
+}
+
+button {
+  @include buttonBlue();
+  align-self: flex-end;
+}
+
+@media screen and (max-width: 600px) {
+  .add-member-wrapper .add-member-container .selector-container {
+    gap: 4px;
+  }
+}

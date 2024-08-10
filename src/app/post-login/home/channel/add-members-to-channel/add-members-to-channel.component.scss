@@ -1,0 +1,137 @@
+@import '../../../../../styles.scss';
+@import '../create-channel/create-new-channel/create-new-channel.component.scss';
+
+.add-members-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 514px;
+  width: 100%;
+  min-width: 300px;
+  padding: 40px;
+  background-color: $white;
+  border-radius: 20px 0px 20px 20px;
+  gap: 20px;
+  position: absolute;
+  top: 200px;
+  right: 60px;
+}
+
+.headline {
+  @include Nunito(700, 24px, 32.79px, $black);
+  @include dFlex(row, space-between, center);
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.current-channel-name {
+  @include dFlex(row, start, center);
+  gap: 8px;
+  > img {
+    height: 18px;
+    width: 18px;
+  }
+  > span {
+    @include Nunito(400, 18px, 24.55px, $purple-2);
+  }
+}
+
+.search-input {
+  @include inputField();
+  padding: 15px 20px;
+}
+
+button {
+  align-self: flex-end;
+  @include buttonBlue();
+}
+
+.search-results {
+  position: absolute;
+  top: 52px;
+  left: 15px;
+  box-shadow: unset;
+}
+
+.show-user {
+  width: fit-content;
+  @include dFlex(row, start, center);
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 8px 16px;
+  border-radius: 30px;
+  > img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+  }
+  &:hover {
+    @include btnHover($bg-color);
+  }
+}
+
+.disabled {
+  background-color: lighten($color: grey, $amount: 0.2);
+  > img {
+    filter: grayscale(100%);
+  }
+  &:hover {
+    background-color: lighten($color: grey, $amount: 0.2);
+    cursor: not-allowed;
+  }
+}
+
+.d-none {
+  display: none;
+}
+
+.deletable-user {
+  height: 50px;
+  position: absolute;
+  top: 153px;
+  background-color: $bg-color;
+  left: 57px;
+  > img:last-child {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+// responsive
+
+@media screen and (max-width: 600px) {
+  .add-members-container {
+    width: 320px;
+    position: absolute;
+    top: 150px;
+    right: 0;
+    left: calc(50% - 160px) !important;
+    border-radius: 20px;
+  }
+
+  .current-channel-name {
+    > span {
+      @include Nunito(400, 18px, 24.55px, $purple-2);
+      max-width: 10ch;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .search-results {
+    position: absolute;
+    top: 47px;
+    left: -30px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .add-members-container {
+    top: 90px;
+  }
+}

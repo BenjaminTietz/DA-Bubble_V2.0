@@ -1,0 +1,120 @@
+@import '../../../../styles.scss';
+
+.user-profile-wrapper {
+  @include dFlex(column, space-around, flex-start);
+
+  width: 500px;
+  height: 705px;
+  border-radius: 30px;
+  padding: 40px;
+  gap: 45px;
+  background-color: $white;
+  box-sizing: content-box;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-top-section {
+  @include dFlex(row, space-between, flex-start);
+  width: 100%;
+  h1 {
+    @include Nunito(700, 24px, 32.73px, $black);
+  }
+}
+
+.profile-avatar {
+  @include dFlex(row, center, center);
+  gap: 20px;
+  width: 100%;
+
+  > img {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+  }
+}
+
+.profile-bottom-section {
+  @include dFlex(column, flex-start, flex-start);
+  gap: 20px;
+  width: 100%;
+
+  .profile-name {
+    width: 100%;
+  }
+
+  h2 {
+    @include Nunito(700, 32px, 43.65px, $black);
+  }
+
+  .profile-status {
+    @include dFlex(row, flex-start, center);
+    width: 100%;
+    gap: 15px;
+
+    .online-status {
+      @include dFlex(row, center, center);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+
+    p {
+      @include Nunito(400, 20px, 27.28px, $offline-gray);
+    }
+  }
+
+  .profile-email-container {
+    @include dFlex(row, flex-start, center);
+    width: 100%;
+
+    .email {
+      @include dFlex(row, flex-start, center);
+      gap: 20px;
+    }
+
+    img {
+      width: 25px;
+      height: 20px;
+    }
+
+    p {
+      @include Nunito(700, 20px, 27.28px, $black);
+    }
+  }
+
+  .profile-email-adress {
+    @include dFlex(row, flex-start, center);
+    width: 100%;
+    padding: 0 10px 0 50px;
+
+    p {
+      @include Nunito(400, 18px, 24.55px, $email-blue);
+    }
+  }
+}
+
+.profile-send-msg {
+  @include dFlex(row, center, center);
+  width: 100%;
+
+  .btn-wrapper {
+    @include dFlex(row, center, center);
+    width: 164px;
+    height: 49px;
+    border-radius: 50px;
+    background-color: $purple-1;
+    padding: 12px 25px 12px 25px;
+    gap: 10px;
+
+    p {
+      @include Nunito(700, 18px, 24.55px, $white);
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .user-profile-wrapper {
+    width: unset !important;
+    height: unset !important;
+  }
+}

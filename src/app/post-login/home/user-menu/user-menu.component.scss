@@ -1,0 +1,35 @@
+@import '../../../../styles.scss';
+
+.user-menu-wrapper {
+  @include dFlex(column, flex-start, center);
+  width: 282px;
+  height: 181px;
+  background-color: $white;
+  border-radius: 30px 0 30px 30px;
+  padding: 30px;
+  gap: 15px;
+  box-sizing: border-box;
+
+  .menu-content {
+    @include dFlex(column, center, center);
+    width: fit-content;
+    height: 53px;
+    border-radius: 100px;
+    padding: 10px 70px 10px 70px;
+    gap: 15px;
+    transition: all 0.1s ease-in;
+
+    p {
+      @include Nunito(600, 24px, 32.74px, $black);
+      text-wrap: nowrap;
+    }
+
+    &:hover {
+      background-color: $bg-color;
+
+      p {
+        @include Nunito(700, 24px, 32.74px, $purple-3);
+      }
+    }
+  }
+}

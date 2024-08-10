@@ -1,0 +1,177 @@
+@import '../../../../styles.scss';
+
+.channel-wrapper {
+  @include dFlex(column, space-between, center);
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  > .top-section {
+    @include dFlex(row, space-between, center);
+    width: 100%;
+    height: 110px;
+    padding: 20px 0;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0px 3px 4px -2px rgba(0, 0, 0, 0.1);
+    box-sizing: content-box;
+
+    > .active-group-chat {
+      @include buttonWhite();
+      @include dFlex(row, center, center);
+      border: none;
+      gap: 16px;
+
+      &:hover {
+        > span {
+          color: $purple-1;
+        }
+
+        background-color: $bg-color;
+        transition: all 175ms ease-in;
+      }
+
+      &:hover img {
+        filter: invert(57%) sepia(94%) saturate(4679%) hue-rotate(221deg) brightness(100%) contrast(91%);
+      }
+
+      &:active {
+        @include btnActive($bg-color);
+      }
+
+      > img:first-child {
+        width: 22px;
+        height: 23px;
+      }
+
+      > span {
+        @include Nunito(700, 24px, 27.8px, $black);
+        display: inline-block;
+        width: 100%;
+        max-width: 20ch;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      > img:last-child {
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    > .avatar-collection {
+      position: relative;
+      @include dFlex(row, center, center);
+      gap: 16px;
+      padding: 12px 25px;
+
+      > .user-profile-img-container {
+        position: relative;
+        width: 110px;
+        height: 45px;
+        padding: 10px 10px 10px 20px;
+        border-radius: 20px;
+        left: 8px;
+
+        > .user-profile-img {
+          position: absolute;
+          bottom: calc(50% - 20px);
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 3px solid $white;
+        }
+
+        &:hover {
+          background-color: $bg-color;
+          transition: all 175ms ease-in;
+        }
+
+        &:active {
+          @include btnActive($bg-color);
+        }
+      }
+
+      .user-counter {
+        @include Nunito(600, 20px, 27.28px, $black);
+      }
+
+      .add-member {
+        @include dFlex(row, center, center);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: $bg-color;
+        padding: 8px;
+        gap: 10px;
+        transition: 0.1 ease-in-out;
+
+        &:hover img {
+          filter: invert(57%) sepia(94%) saturate(4679%) hue-rotate(221deg) brightness(100%) contrast(91%);
+        }
+      }
+    }
+  }
+
+  // for empty privateNote-overlay
+  .chat-history {
+    position: relative;
+    overflow-y: auto;
+
+    .empty-chat-overlay {
+      @include dFlex(column, flex-end, flex-start);
+      position: absolute;
+      width: 90%;
+      height: 100%;
+      top: 0;
+      left: 28px;
+      gap: 24px;
+
+      .top-section {
+        @include dFlex(row, flex-start, flex-end);
+        width: 100%;
+        height: 100px;
+        gap: 25px;
+
+        h1 {
+          @include Nunito(700, 24px, 32.74px, $black);
+        }
+      }
+
+      .bottom-section {
+        @include dFlex(row, flex-start, center);
+        height: fit-content;
+        width: 100%;
+
+        h2 {
+          @include Nunito(400, 20px, 27.28px, $text-gray);
+
+          span {
+            @include Nunito(400, 20px, 27.28px, $purple-3);
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .group-display {
+    padding: 25px 25px !important;
+  }
+
+  .active-group-chat {
+    padding: 12px 15px !important;
+  }
+
+  .group-chat-container {
+    > .group-display {
+      > .active-group-chat {
+        > span {
+          max-width: 10ch;
+        }
+      }
+    }
+  }
+}

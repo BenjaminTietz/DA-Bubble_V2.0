@@ -1,0 +1,67 @@
+<div class="channel-wrapper">
+  @for (channel of this.firebaseService.channelList; track channel; let index = $index) {
+    @if (channel.chanId === chatService.docRef) {
+      <div
+        class="top-section"
+        [ngClass]="{
+          'space-arround': this.communicationService.isMobileViewActive || this.communicationService.isThreadVisible
+        }"
+      >
+        <div class="active-group-chat" (click)="toggleShowChannelDetails()">
+          <img src="assets/img/icons/hashtag_chat_black.png" alt="" />
+          @if (channel.chanId === this.chatService.docRef) {
+            <span>{{ channel.name }}</span>
+          }
+          <img class="pointer" src="assets/img/icons/keyboard_arrow_down_black.png" alt="" />
+        </div>
+        <div class="avatar-collection">
+          @if (!communicationService.isMobileViewActive) {
+            <div class="user-profile-img-container pointer" (click)="handleClickOnMember()">
+              @for (member of channel.members; track member; let index = $index) {
+                @if (index < 3) {
+                  <img
+                    [ngStyle]="{ left: getLeftStyleValue(index) + 'px' }"
+                    class="user-profile-img"
+                    src="{{ this.firebaseService.getUserAvatar(member) }}"
+                    alt=""
+                  />
+                }
+              }
+            </div>
+            <div class="user-counter">
+              <span>{{ channel.members.length }}</span>
+            </div>
+          }
+          <div class="add-member pointer" (click)="toggleAddMembersToChannel()">
+            <img src="assets/img/icons/person_add.png" alt="Add button" />
+          </div>
+        </div>
+      </div>
+    }
+  }
+  <div class="chat-history">
+    @for (channel of firebaseService.channelList; track channel.chanId; let index = $index) {
+      @if (channel.chanId === chatService.docRef) {
+        @if (chatService.msgList.length === 0) {
+          <div class="empty-chat-overlay">
+            <div class="top-section">
+              <h1>{{ "# " + channel.name }}</h1>
+            </div>
+            <div class="bottom-section">
+              <h2>
+                Du hast diesen Channel am {{ channel.createdAt }} erstellt. Dies ist der Anfang des Channels
+                <span>{{ "# " + channel.name + "." }}</span>
+              </h2>
+            </div>
+          </div>
+        }
+      }
+    }
+
+    <app-chat-history></app-chat-history>
+  </div>
+
+  <div class="chat-input">
+    <app-chat-input labelId="channel" (messageEvent)="this.chatService.onMessageSent($event)"></app-chat-input>
+  </div>
+</div>

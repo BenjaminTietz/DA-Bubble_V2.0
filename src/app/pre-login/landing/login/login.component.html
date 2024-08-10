@@ -1,0 +1,45 @@
+<h1>Anmeldung</h1>
+<h2>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der Arbeit verwendest.</h2>
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
+  <div class="input-with-error">
+    <div class="input-box">
+      <img src="assets/img/icons/email.png" alt="" />
+      <input type="text" placeholder="beispielname@email.com" formControlName="email" />
+    </div>
+    @if (formInvalid(loginForm.controls.email)) {
+      @if (loginForm.controls.email.errors?.["required"]) {
+        <p class="error-message">*Bitte schreiben Sie eine E-Mail-Adresse.</p>
+      }
+      @if (loginForm.controls.email.errors?.["email"]) {
+        <p class="error-message">*Dies ist keine gültige E-Mail-Adresse</p>
+      }
+    }
+  </div>
+  <div class="input-with-error">
+    <div class="input-box">
+      <img src="assets/img/icons/password.png" alt="" />
+      <input type="{{ inputType }}" placeholder="Passwort" formControlName="password" />
+      <img src="{{ visibilityIcon }}" alt="" class="visibility-icon" (click)="changePasswordVisibility()" />
+    </div>
+    @if (formInvalid(loginForm.controls.password)) {
+      @if (loginForm.controls.password.errors?.["required"]) {
+        <p class="error-message">*Bitte geben Sie ein Passwort ein.</p>
+      }
+      @if (loginForm.controls.password.errors?.["minlength"]) {
+        <p class="error-message">*Das Passwort muss mindestens 6 Zeichen lang sein.</p>
+      }
+    }
+  </div>
+  <a routerLink="/password-reset-request">Passwort vergessen?</a>
+  <div class="separator">
+    <span>ODER</span>
+  </div>
+  <button class="login-with-google" type="button" (click)="loginWithGoogle()">
+    <img src="assets/img/logos/google.png" alt="" />
+    <span>Anmelden mit Google</span>
+  </button>
+  <div class="button-wrap">
+    <button class="button-blue" type="submit" [disabled]="!loginForm.valid">Anmelden</button>
+    <button class="button-white" type="button" (click)="loginAsGuest()">Gäste-Login</button>
+  </div>
+</form>

@@ -1,0 +1,162 @@
+@import '../../../../styles.scss';
+@import '../../shared/channel-member-selection/channel-member-selection.component.scss';
+
+.header-wrapper {
+  @include dFlex(column, center, center);
+  position: relative;
+
+  .header-container {
+    width: 100svw;
+    padding: 24px;
+    height: 100px;
+    @include dFlex(row, space-evenly, center);
+
+    >.logo-container {
+      @include dFlex(center, center);
+      gap: 16px;
+    }
+
+    .searchbar-container {
+      position: relative;
+      width: 100%;
+      margin: 0 24px;
+
+      form {
+        >.header-searchbar {
+          @include Nunito(400, 24px, 18.8px, $text-gray);
+          width: 100%;
+          padding: 17.5px 45px;
+          background-image: url('../../../../assets/img/icons/search.png');
+          background-repeat: no-repeat;
+          background-position: 95% center;
+          border-radius: 42px;
+          border: none;
+
+          &:focus {
+            border: 1px solid $purple-3;
+            outline: none;
+          }
+        }
+      }
+    }
+
+    >.user-avatar {
+      @include dFlex(center, center);
+      position: relative;
+      gap: 16px;
+      transition: 0.1s ease-in-out;
+
+      &:hover .drop-down {
+        filter: invert(57%) sepia(94%) saturate(4679%) hue-rotate(221deg) brightness(100%) contrast(91%);
+      }
+
+      &:hover span:first-child {
+        @include Nunito(700, 32px, 18.8px, $purple-3);
+      }
+
+      >img {
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+      }
+    }
+
+    .user-status {
+      position: absolute;
+      bottom: 0;
+      right: 48px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: solid 2px white;
+    }
+  }
+
+  .search-results {
+    width: inherit;
+    position: absolute;
+    top: 70px;
+    z-index: 8;
+    background-color: $white;
+    @include Nunito(400, 16px, 18.8px, $black);
+  }
+}
+
+.close-btn {
+  position: absolute;
+  top: 28px;
+  right: 47px;
+  z-index: 10;
+}
+
+.mb-8 {
+  margin-bottom: 8px;
+}
+
+.width100 {
+  width: 100%;
+}
+
+.jc-unset {
+  justify-content: unset !important;
+}
+
+h3 {
+  @include Nunito(600, 24px, 18.8px, $black);
+  padding: 20px;
+}
+
+.content-container {
+  padding: 20px;
+}
+
+.headline {
+  @include Nunito(700, 32px, 18.8px, $black);
+  text-wrap: nowrap;
+}
+
+.message-container {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 12px;
+  @include dFlex(column, start, start);
+  gap: 12px;
+
+  >span {
+    @include Nunito(400, 16px, 18.8px, $black);
+  }
+
+  &:hover {
+    background-color: $bg-color;
+  }
+}
+
+.message-avatar {
+  @include dFlex(start, start);
+  gap: 8px;
+
+  >img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid $white;
+  }
+}
+
+.message-text {
+  @include dFlex(column, start, start);
+  gap: 4px;
+
+  >span {
+    @include Nunito(400, 14px, 18.8px, $text-gray);
+  }
+
+  >span:nth-child(2) {
+    @include Nunito(700, 16px, 18.8px, $black);
+  }
+
+  >span:last-child {
+    @include Nunito(400, 16px, 18.8px, $black);
+  }
+}

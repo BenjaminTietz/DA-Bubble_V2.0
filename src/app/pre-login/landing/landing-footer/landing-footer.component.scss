@@ -1,0 +1,41 @@
+@import './../../../../styles.scss';
+
+:host {
+  display: block;
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+footer {
+  @include dFlex();
+  gap: 32px;
+  width: 100%;
+  height: $footer-height;
+  a {
+    @include Figtree(400, 18px, 21.6px, $purple-2);
+    padding: 10px 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.1s;
+    &:hover {
+      border: 1px solid $light-purple-lines;
+      font-variation-settings: 'wght' 500;
+      padding: 10px 14.5px;
+    }
+  }
+}
+
+@media screen and (max-width: 650px) {
+  :host {
+    position: static;
+  }
+  footer {
+    height: 60px;
+    a {
+      font-size: 12px;
+    }
+  }
+}

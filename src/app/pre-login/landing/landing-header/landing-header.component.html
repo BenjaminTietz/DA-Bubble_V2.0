@@ -1,0 +1,15 @@
+<header [@intro]="introAnimationStarted" (@intro.done)="onAnimationDone()" [@.disabled]="appComponent.introIsDisabled">
+  <div class="logo-with-text">
+    <img src="assets/img/logos/da_bubble_logo.png" />
+    <div class="span-wrap">
+      <span>DABubble</span>
+    </div>
+  </div>
+  <div>
+    <div class="sign-up">
+      <span>Neu bei DABubble?</span>
+      <a routerLink="/signup">Konto erstellen</a>
+    </div>
+  </div>
+  <div class="overlay" *ngIf="!introAnimationFinished"></div>
+</header>

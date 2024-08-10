@@ -1,0 +1,47 @@
+<div class="user-profile-wrapper">
+  <div class="profile-top-section">
+    <h1>Profil</h1>
+    <div class="pointer close-btn" (click)="closeUserProfile()">
+      <img src="assets/img/icons/close_black.png" alt="close-icon" />
+    </div>
+  </div>
+
+  <div class="profile-avatar">
+    <img [src]="this.firebaseService.getUserAvatar(this.showDataOfUser)" alt="user-avatar" />
+  </div>
+
+  <div class="profile-bottom-section">
+    <div class="profile-name">
+      <h2>{{ this.firebaseService.getUserDisplayName(this.showDataOfUser) }}</h2>
+    </div>
+
+    <div class="profile-status">
+      <div
+        class="online-status"
+        [ngClass]="{
+          online: this.firebaseService.getUserOnlineStatus(this.showDataOfUser),
+          offline: !this.firebaseService.getUserOnlineStatus(this.showDataOfUser)
+        }"
+      ></div>
+      <p>{{ this.firebaseService.getUserStatusText(showDataOfUser) }}</p>
+    </div>
+
+    <div class="profile-email-container">
+      <div class="email">
+        <img src="assets/img/icons/email_black.png" alt="email-icon" />
+        <p>E-Mail-Adresse</p>
+      </div>
+    </div>
+    <div class="pointer profile-email-adress">
+      <a style="text-decoration: none" [href]="'mailto:' + this.firebaseService.getUserEmail(this.showDataOfUser)">
+        <p>{{ this.firebaseService.getUserEmail(this.showDataOfUser) }}</p>
+      </a>
+    </div>
+    <div class="profile-send-msg">
+      <div class="pointer btn-wrapper" (click)="startNewPrivateChat()">
+        <img src="assets/img/icons/send_msg_white.png" alt="email-icon" />
+        <p>Nachricht</p>
+      </div>
+    </div>
+  </div>
+</div>

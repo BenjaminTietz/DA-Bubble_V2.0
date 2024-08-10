@@ -1,0 +1,269 @@
+@import '../../../styles.scss';
+
+.home-wrapper {
+  @include dFlex(column, flex-start, flex-start);
+  width: 100svw;
+  height: 100svh;
+  box-sizing: border-box;
+}
+
+.home-content {
+  @include dFlex(row, flex-start, flex-start);
+  position: relative;
+  height: 100%;
+  width: 100%;
+  gap: 24px;
+  box-sizing: border-box;
+  padding: 16px;
+}
+
+.sidenav-wrapper {
+  height: 100%;
+  z-index: 3;
+  box-sizing: border-box;
+  transform: translateX(0);
+
+  &.slide-in {
+    animation: slide-right 0.175s forwards;
+  }
+
+  &.slide-out {
+    animation: slide-left 0.175s forwards;
+  }
+
+  &.d-none {
+    display: none;
+  }
+
+  @keyframes slide-right {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-left {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(-120%);
+    }
+  }
+}
+
+
+
+.welcome-wrapper {
+  @include dFlex(row, center, center);
+  height: calc(100svh - 148px);
+  width: 100%;
+  box-sizing: content-box;
+}
+
+// contains the router-outlet & thread
+.content-container {
+  @include dFlex(row, space-between, center);
+  width: 100%;
+  gap: 24px;
+
+  .router-wrapper {
+    width: 100%;
+    border-radius: 30px;
+    background-color: $white;
+    height: calc(100svh - 148px);
+    box-sizing: border-box;
+
+  }
+
+  .thread-wrapper {
+    width: 50%;
+    border-radius: 30px;
+    background-color: $white;
+    height: calc(100svh - 148px);
+    box-sizing: border-box;
+    z-index: 6;
+  }
+}
+
+
+
+// sideNav controller
+.sidenav-controller {
+  @include dFlex(row, center, center);
+  width: 50px;
+  height: 347px;
+  background-color: $white;
+  position: absolute;
+  top: 20%;
+  left: 0;
+  z-index: 7;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-orientation: mixed;
+  border-radius: 30px 0px 0px 30px;
+  box-shadow: -1px 0 4px #00000033;
+  gap: 16px;
+
+  &:hover {
+    span {
+      @include Nunito(700, 20px, 24px, $purple-3);
+    }
+  }
+
+  &:hover img {
+    filter: invert(50%) sepia(37%) saturate(6446%) hue-rotate(220deg) brightness(99%) contrast(93%);
+  }
+
+  span {
+    @include Nunito(500, 20px, 24px, $black);
+  }
+}
+
+.sidenav-open {
+  transform: scaleX(-1);
+  transition: transform 0.175s;
+}
+
+.sidenav-close {
+  transform: scaleX(1);
+  transition: transform 0.175s;
+}
+
+//popup
+.popup-wrapper {
+  @include dFlex(row, center, center);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100svw;
+  height: 100svh;
+  transition:
+    background,
+    ease-in-out 0.175s backdrop-filter;
+  background: rgba(0, 0, 0, 0);
+  z-index: 7;
+
+  &.visible {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: brightness(0.8);
+  }
+
+  .popup-content-user-profile {
+    position: absolute;
+    top: 96px;
+    right: 24px;
+  }
+}
+
+.current-user-popup {
+  z-index: 10;
+}
+
+.popup-channel-members {
+  position: absolute;
+  top: 190px;
+  right: 140px;
+}
+
+// mobile view menu wrapper
+.mobile-popup-wrapper {
+  @include dFlex(row, center, flex-end);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100svw;
+  height: 100svh;
+  transition:
+    background 0.175s ease-in-out,
+    backdrop-filter 0.175s ease-in-out;
+  background: rgba(0, 0, 0, 0);
+  z-index: 55;
+
+  &.visible {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: brightness(0.8);
+  }
+
+  .mobile-user-menu-content {
+    animation: slide-up 0.175s forwards;
+
+    @keyframes slide-up {
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    &.hide {
+      animation: slide-down 0.175s forwards;
+    }
+
+    @keyframes slide-down {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(100%);
+      }
+    }
+  }
+}
+
+// welcome screen
+app-welcome-screen {
+  width: 100%;
+  height: 100%;
+}
+
+
+// channel details content
+
+.channel-details-content {
+  @include dFlex(column, center, center);
+}
+
+@media screen and (max-width: 850px) {
+  .home-content {
+    height: unset;
+  }
+
+  .app-wrapper {
+    position: absolute !important;
+  }
+
+  .sidenav-wrapper {
+    width: 100% !important;
+    padding: unset !important;
+  }
+}
+
+// rotate wrapper
+.rotate-wrapper {
+  @include dFlex(column, center, center);
+  width: 100%;
+  height: 100%;
+  gap: 24px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: $bg-color;
+  z-index: 20;
+
+  span {
+    @include Nunito(700, 28px, 24px, $black);
+  }
+
+  img {
+    width: 100px;
+    height: 100px;
+  }
+}

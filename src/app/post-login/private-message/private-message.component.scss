@@ -1,0 +1,107 @@
+@import "../../../../src/styles.scss";
+
+.private-msg-wrapper {
+  @include dFlex(column, space-between, center);
+  width: 100%;
+  height: calc(100svh - 148px);
+  position: relative;
+
+  .top-section {
+    @include dFlex(row, flex-start, center);
+    width: 100%;
+    height: 110px;
+    padding: 32px 45px 20px 45px;
+    gap: 15px;
+    box-shadow: 0px 3px 4px -2px rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+
+    span {
+      @include Nunito(700, 24px, 32.74px, $black);
+    }
+
+    .user-content {
+      @include dFlex(row, flex-start, center);
+      position: relative;
+      width: fit-content;
+      height: 58px;
+      padding: 4px 8px 4px 8px;
+      gap: 15px;
+      border-radius: 30px;
+
+      &:hover {
+        background-color: $bg-color;
+      }
+
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+    }
+
+    .user-status {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid $white;
+      position: absolute;
+      top: 42px;
+      left: 40px;
+    }
+  }
+
+  // for empty chat-overlay 
+  .chat-history {
+    position: relative;
+    overflow-y: auto;
+
+    .empty-chat-overlay {
+      @include dFlex(column, flex-end, flex-start);
+      position: absolute;
+      width: 80%;
+      height: 90%;
+      top: 0;
+      left: 28px;
+      gap: 24px;
+
+      .top-section {
+        @include dFlex(row, flex-start, flex-end);
+        width: inherit;
+        height: 100px;
+        gap: 25px;
+        border: unset;
+        box-shadow: unset;
+
+        .user-avatar {
+          @include dFlex(row, center, center);
+
+          img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+          }
+        }
+
+        h1 {
+          @include Nunito(700, 24px, 32.74px, $black);
+        }
+      }
+
+      .bottom-section {
+        @include dFlex(row, flex-start, center);
+        width: inherit;
+        height: 27px;
+        gap: 5px;
+
+        h2 {
+          @include Nunito(400, 20px, 27.28px, $text-gray);
+        }
+
+        span {
+          @include Nunito(400, 20px, 27.28px, $purple-3);
+        }
+      }
+    }
+  }
+}

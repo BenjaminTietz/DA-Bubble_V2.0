@@ -1,0 +1,106 @@
+@import '../../../styles.scss';
+
+body {
+  overflow: unset !important;
+}
+
+section {
+  min-height: 100dvh;
+  padding: 0 16px;
+}
+
+header {
+  padding: 55px 70px;
+  @include dFlex($jc: space-between, $ai: center);
+  div:nth-child(1) {
+    @include dFlex($ai: center);
+    img {
+      width: 70px;
+      height: 70px;
+      margin-right: 16px;
+    }
+    h1 {
+      color: $black;
+      font-size: 1.25rem;
+    }
+  }
+}
+
+main {
+  position: relative;
+  max-width: 1920px;
+  height: 80dvh;
+  margin: 0 auto;
+  padding: 70px 70px;
+  background-color: $white;
+  border-radius: 30px;
+  overflow-y: auto !important;
+}
+
+.back-button {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  @include dFlex(row, center, center);
+  &:hover {
+    @include btnHover($bg-color);
+  }
+  &:active {
+    @include btnActive($bg-color);
+  }
+}
+
+h1 {
+  @include Nunito(700, 36px, 28.8px, $purple-3);
+  margin: 0;
+}
+
+h2 {
+  @include Nunito(700, 24px, 18.8px, $purple-3);
+  margin: 0;
+}
+
+a {
+  @include Nunito(700, 18px, 24.55px, $purple-3);
+  text-decoration: none;
+  word-wrap: break-word;
+  &:hover {
+    color: $purple-1;
+  }
+}
+
+ul {
+  padding-left: 20px;
+  li {
+    margin: 8px 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  header {
+    @include dFlex($jc: center, $ai: center);
+    padding: 40px 0;
+  }
+
+  main {
+    padding: 70px 40px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 460px) {
+  main {
+    padding: 70px 20px;
+  }
+  h1 {
+    font-size: 1.5rem;
+  }
+}

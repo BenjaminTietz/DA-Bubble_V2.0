@@ -1,0 +1,33 @@
+<div class="mobile-menu-wrapper">
+  <div class="btn-container">
+    <div
+      class="toggle-btn pointer"
+      (click)="this.communicationService.closeMobileMenuPopupOverlay('mobileUserMenu')"
+    ></div>
+  </div>
+  <div class="menu-container">
+    <div
+      class="pointer menu-content"
+      [ngClass]="{ active: activeMenu === 'profile' }"
+      (click)="this.setActiveMenu('profile')"
+    >
+      <img src="assets/img/icons/account_circle_input_black.png" alt="account-circle" />
+      <p
+        (click)="
+          this.communicationService.toggleCurrentUserProfileVisibility(true);
+          this.communicationService.toggleMobileUserMenu()
+        "
+      >
+        Profil
+      </p>
+    </div>
+    <div
+      class="pointer menu-content"
+      [ngClass]="{ active: activeMenu === 'logout' }"
+      (click)="this.setActiveMenu('logout'); this.logout()"
+    >
+      <img src="assets/img/icons/logout_black.png" alt="logout-icon" />
+      <p>Log out</p>
+    </div>
+  </div>
+</div>

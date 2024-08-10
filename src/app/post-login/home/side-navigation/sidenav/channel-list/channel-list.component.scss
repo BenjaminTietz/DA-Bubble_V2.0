@@ -1,0 +1,39 @@
+@import '../../../../../../styles.scss';
+
+.channel-list {
+  @include dFlex(row, flex-start, flex-start);
+  flex-direction: column;
+  gap: 13px;
+  transition: ease-in-out 0.1s;
+  margin-bottom: 24px;
+
+  span {
+    @include Nunito(400, 18px, 24.55px, $black);
+
+    width: fit-content;
+    height: 33px;
+    border-radius: 20px;
+    padding: 4px 20px 4px 20px;
+    gap: 10px;
+
+    &:hover {
+      background-color: $bg-color;
+    }
+
+    &.active {
+      @include Nunito(700, 18px, 24.55px, $purple-3);
+      background-color: $bg-color;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .channel-list {
+    span {
+      width: calc(100vw - 18px);
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+}

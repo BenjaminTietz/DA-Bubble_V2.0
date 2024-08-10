@@ -1,0 +1,37 @@
+<h1>Avatar</h1>
+<form [formGroup]="avatarForm" (ngSubmit)="onSubmit()">
+  <div class="avatar-preview">
+    <img src="{{ avatarSig() }}" />
+    <h2>{{ this.authService.firebaseAuth.currentUser?.displayName }}</h2>
+  </div>
+  <div class="select-avatar-from-list">
+    <span>Aus der Liste wählen</span>
+    <div class="avatar-list">
+      @for (avatar of this.defaultAvatars; track avatar; let i = $index) {
+        <div class="input-box">
+          <input id="avatar_{{ i }}" type="radio" name="avatar" value="{{ avatar }}" formControlName="avatar" />
+          <label for="avatar_{{ i }}">
+            <img src="{{ avatar }}" alt="" />
+          </label>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="upload-image">
+    <span>eigenes Bild verwenden</span>
+    <div class="button-wrap">
+      <input type="file" id="fileUpload" accept=".jpg, .jpeg, .png" (change)="uploadFile($event)" />
+      <label for="fileUpload" class="button-white">Datei hochladen</label>
+    </div>
+  </div>
+  <div class="submit-button-box">
+    <div class="button-wrap">
+      <button class="button-blue" type="submit" [disabled]="!avatarForm.valid || this.submitButtonDisabled">
+        Weiter
+      </button>
+    </div>
+  </div>
+</form>
+<button class="back-button" routerLink="/signup">
+  <img src="assets/img/icons/arrow_back.png" />
+</button>

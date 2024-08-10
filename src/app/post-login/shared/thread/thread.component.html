@@ -1,0 +1,24 @@
+<div
+  class="thread-wrapper"
+  [ngClass]="{
+    'border-radius-unset': this.communicationService.isMobileViewActive,
+    'svh-minus-header': this.communicationService.isMobileViewActive
+  }"
+>
+  <div class="top-section">
+    <div class="top-section-left">
+      <h1>Thread</h1>
+      <!--channel name or Name of user who initially sent msg which got answers-->
+      <span>{{ this.chatService.placeholderName }}</span>
+    </div>
+    <div class="top-section-right pointer" (click)="handleClickOnClose()">
+      <img src="assets/img/icons/close_black.png" alt="close" />
+    </div>
+  </div>
+  <div class="thread-history">
+    <app-thread-history></app-thread-history>
+  </div>
+  <div class="chat-input">
+    <app-chat-input labelId="thread" (messageEvent)="this.threadService.onMessageSent($event)"> </app-chat-input>
+  </div>
+</div>

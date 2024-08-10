@@ -1,0 +1,14 @@
+<div class="notification" [ngStyle]="{ display: notificate ? 'block' : 'none' }">
+  <span>{{ notification }}</span>
+</div>
+<router-outlet></router-outlet>
+
+
+
+<!-- Popup overlay rotate your device-->
+@if ((this.communicationService.isRotateDeviceVisible && !this.communicationService.isMobileViewActive) ) {
+<div class="rotate-wrapper">
+  <span>Bitte drehe dein Gerät</span>
+  <img src="assets/img/icons/rotate_your_device.png" alt="rotate-device-icon" />
+</div>
+}

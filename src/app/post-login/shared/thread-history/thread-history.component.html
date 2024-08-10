@@ -1,0 +1,398 @@
+<div class="thread-history-wrapper" #messageContainer>
+  @for (msg of this.threadService.msgAnswerList; track msg; let index = $index) {
+    @if (msg.messageSendBy !== this.firebaseService.currentUserId) {
+      <!--user-msg-->
+      <div class="user-msg" [id]="msg.messageAnswerId">
+        <!--msg-menu-->
+        <div class="msg-menu">
+          <div
+            class="menu-content pointer"
+            (click)="this.reactionService.handleAddDefinedReaction(msg.messageAnswerId, 'thumbUp', 'thread')"
+          >
+            <div class="emoji-container">👍</div>
+          </div>
+          <div
+            class="menu-content pointer"
+            (click)="this.reactionService.handleAddDefinedReaction(msg.messageAnswerId, 'thumbDown', 'thread')"
+          >
+            <div class="emoji-container">👎</div>
+          </div>
+          <div class="pointer menu-content" (click)="this.toggleEmojiPicker(index)">
+            <img src="assets/img/icons/add_reaction_black.png" alt="menu-icon" />
+          </div>
+        </div>
+        <!--user-avatar-->
+        <div class="user-avatar">
+          <img [src]="this.firebaseService.getUserAvatar(msg.messageSendBy)" alt="user-avatar" />
+        </div>
+        <!--msg-content-->
+        <div class="msg-content">
+          <div class="msg-top">
+            <span class="pointer" (click)="this.communicationService.handleClickOnUser(msg.messageSendBy)">{{
+              this.firebaseService.getUserDisplayName(msg.messageSendBy)
+            }}</span>
+            <p>{{ this.chatService.formatTimeString(msg.time) }}</p>
+          </div>
+          <!--tagged user-->
+          <div class="msg">
+            @if (msg.taggedUser) {
+              <div class="tagged-user-container">
+                @for (taggedUser of msg.taggedUser; track taggedUser; let index = $index) {
+                  <span (click)="this.chatService.handleClickOnUser(taggedUser)" class="tagged-user pointer">{{
+                    "@" + this.firebaseService.getUserDisplayName(taggedUser)
+                  }}</span>
+                }
+              </div>
+            }
+            <span>{{ msg.text }}</span>
+            <!--storage pic-->
+            @if (
+              (msg.storageData && msg.storageData.includes(".jpg")) ||
+              msg.storageData.includes(".png") ||
+              msg.storageData.includes(".jpeg")
+            ) {
+              <div class="storage-pic-container">
+                <div class="wrapper">
+                  <a class="download pointer" (click)="this.storageService.downloadFromUrlDirectly(msg.storageData)">
+                    <img class="download-icon" src="assets/img/icons/download_white.png" alt="" />
+                  </a>
+                  <a href="{{ msg.storageData }}" target="_blank">
+                    <img src="{{ msg.storageData }}" />
+                  </a>
+                </div>
+              </div>
+            } @else if(msg.storageData.includes(".pdf")) {
+              <div class="storage-pic-container">
+                <div class="wrapper">
+                  <a class="download pointer" (click)="this.storageService.downloadFromUrlDirectly(msg.storageData)">
+                    <img class="download-icon" src="assets/img/icons/download_white.png" alt="" />
+                  </a>
+                  <a href="{{ msg.storageData }}" target="_blank">
+                    <img src="assets/img/icons/pdf_white.png" />
+                  </a>
+                </div>
+              </div>
+            }
+            @if (msg.editCount > 0) {
+              <div class="edited-msg-info">
+                <p>Bearbeitet: {{ this.chatService.formatTimeString(msg.lastEdit) }}</p>
+              </div>
+            }
+          </div>
+          <!--reactions container-->
+          <div class="reactions-container">
+            <div class="pointer add-reaction" (click)="this.toggleEmojiPicker(index)">
+              <img src="assets/img/icons/add_reaction_black.png" alt="menu-icon" />
+            </div>
+            @for (reaction of msg.reactions; track reaction; let index = $index) {
+              <div
+                class="pointer last-reaction"
+                (click)="this.reactionService.handleClickOnLastReaction(reaction, msg.messageAnswerId, 'thread')"
+              >
+                <div class="emoji-container">
+                  {{ reaction.nativeEmoji }}
+                </div>
+                <span class="emoji-counter">{{ reaction.amount }}</span>
+                @if (!communicationService.isMobileViewActive) {
+                  <div class="show-who-reacted">
+                    <div class="emoji-container">
+                      {{ reaction.nativeEmoji }}
+                    </div>
+                    @for (user of reaction.user; track user; let index = $index) {
+                      @if (index < 2) {
+                        @if (user == this.firebaseService.currentUserId) {
+                          <span> {{ this.firebaseService.getUserDisplayName(user) }} (Du)</span>
+                        } @else {
+                          <span>{{ this.firebaseService.getUserDisplayName(user) }}</span>
+                        }
+                      }
+                    }
+                    <p>hat reagiert</p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+        <!-- emoji Picker-->
+        @if (index === this.reactionService.emojiPickerIndexThread) {
+          @if (this.reactionService.showEmojiPickerThread) {
+            <div class="user-emoji-picker-container">
+              <div class="close-btn pointer" (click)="this.toggleEmojiPicker(index)">
+                <img src="assets/img/icons/close_black.png" alt="close-icon" />
+              </div>
+              <emoji-mart
+                [style]="{ width: '200px', height: '350px' }"
+                [perLine]="1"
+                [totalFrequentLines]="1"
+                [darkMode]="true"
+                [enableFrequentEmojiSort]="true"
+                [emojiTooltip]="false"
+                [hideObsolete]="true"
+                [showSingleCategory]="true"
+                [enableSearch]="false"
+                [showPreview]="false"
+                (emojiClick)="this.reactionService.handleReaction($event, msg.messageAnswerId, 'thread')"
+              >
+              </emoji-mart>
+            </div>
+          }
+        }
+      </div>
+      <!--seperator with answer count-->
+      @if (index == 0) {
+        <div class="msg-answer-counter">
+          @if (this.threadService.msgAnswerList.length == 2) {
+            <span>{{ this.threadService.msgAnswerList.length - 1 }} Anwort</span>
+          } @else {
+            <span>{{ this.threadService.msgAnswerList.length - 1 }} Anworten</span>
+          }
+          <div class="seperator"></div>
+        </div>
+      }
+    }
+
+    <!--current-user-msg-->
+    @if (msg.messageSendBy == this.firebaseService.currentUserId) {
+      <div class="current-user-msg" [id]="msg.messageAnswerId">
+        <!--popUp overlay for deleting specific current user msg-->
+        @if (
+          this.communicationService.isDeleteThreadMsgDialogVisible &&
+          msg.messageAnswerId === this.threadService.editMessageAnswerId
+        ) {
+          <div class="delete-msg-dialog">
+            <span>Möchtest du diese Nachricht wirklich löschen?</span>
+            <div class="dialog-btns">
+              <button class="cancel-btn pointer" (click)="this.handleClickOnCancelDeleteMsg()">
+                <span>Abbrechen</span>
+              </button>
+              <button class="delete-btn pointer" (click)="this.handleClickOnConfirmDeleteMsg(msg.storageData)">
+                <span>Löschen</span>
+              </button>
+            </div>
+          </div>
+        }
+
+        <!--msg-menu only displayed for current user-->
+        <div class="msg-menu">
+          <div
+            class="menu-content pointer"
+            (click)="this.reactionService.handleAddDefinedReaction(msg.messageAnswerId, 'thumbUp', 'thread')"
+          >
+            <div class="emoji-container">👍</div>
+          </div>
+          <div
+            class="menu-content pointer"
+            (click)="this.reactionService.handleAddDefinedReaction(msg.messageAnswerId, 'thumbDown', 'thread')"
+          >
+            <div class="emoji-container">👎</div>
+          </div>
+          <div class="pointer menu-content">
+            <img
+              src="assets/img/icons/add_reaction_black.png"
+              alt="menu-icon"
+              (click)="this.toggleEmojiPicker(index)"
+            />
+          </div>
+          <div class="pointer menu-content" (click)="this.toggleMsgMenu()">
+            <img src="assets/img/icons/more_vert_black.png" alt="menu-icon" />
+          </div>
+
+          <!--sub menu "edit-msg"-->
+          @if (this.communicationService.isMsgMenuThreadVisible) {
+            <div class="edit-msg-menu">
+              <!--add logic to edit msg-->
+              <div
+                class="edit-msg pointer"
+                (click)="this.handleClickOnEditMsg(msg.messageAnswerId, msg.messageId, index)"
+              >
+                <span>Nachricht bearbeiten</span>
+              </div>
+              <!--add logic to delete msg-->
+              @if (index > 0) {
+                <div class="edit-msg pointer" (click)="this.handleClickOnDeleteMsg(msg.messageId, msg.messageAnswerId)">
+                  <span>Nachricht löschen</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+        <!--msg-content-->
+        <div class="current-user-msg-content">
+          <div class="current-user-msg-top">
+            <p>{{ this.chatService.formatTimeString(msg.time) }}</p>
+            <span class="pointer" (click)="this.communicationService.handleClickCurrentUser(true)">{{
+              this.firebaseService.getUserDisplayName(this.firebaseService.currentUserId)
+            }}</span>
+          </div>
+
+          <div class="current-user-msg">
+            <!--tagged user-->
+            @if (msg.taggedUser) {
+              <div class="tagged-user-container">
+                @for (taggedUser of msg.taggedUser; track taggedUser; let index = $index) {
+                  <span (click)="this.chatService.handleClickOnUser(taggedUser)" class="tagged-user pointer">{{
+                    "@" + this.firebaseService.getUserDisplayName(taggedUser)
+                  }}</span>
+                }
+              </div>
+            }
+            <span>{{ msg.text }}</span>
+            <!--storage pic-->
+            @if (
+              (msg.storageData && msg.storageData.includes(".jpg")) ||
+              msg.storageData.includes(".png") ||
+              msg.storageData.includes(".jpeg")
+            ) {
+              <div class="storage-pic-container">
+                <div class="wrapper">
+                  <a class="download pointer" (click)="this.storageService.downloadFromUrlDirectly(msg.storageData)">
+                    <img class="download-icon" src="assets/img/icons/download_white.png" alt="" />
+                  </a>
+                  <a href="{{ msg.storageData }}" target="_blank">
+                    <img src="{{ msg.storageData }}" />
+                  </a>
+                </div>
+              </div>
+            } @else if(msg.storageData.includes(".pdf")) {
+              <div class="storage-pic-container">
+                <div class="wrapper">
+                  <a class="download pointer" (click)="this.storageService.downloadFromUrlDirectly(msg.storageData)">
+                    <img class="download-icon" src="assets/img/icons/download_white.png" alt="" />
+                  </a>
+                  <a href="{{ msg.storageData }}" target="_blank">
+                    <img src="assets/img/icons/pdf_white.png" />
+                  </a>
+                </div>
+              </div>
+            }
+            @if (msg.editCount > 0) {
+              <div class="edited-msg-info">
+                <p>Bearbeitet: {{ this.chatService.formatTimeString(msg.lastEdit) }}</p>
+              </div>
+            }
+          </div>
+          <!--reactions container-->
+          <div class="reactions-container">
+            @for (reaction of msg.reactions; track reaction; let index = $index) {
+              <div
+                class="pointer last-reaction"
+                (click)="this.reactionService.handleClickOnLastReaction(reaction, msg.messageAnswerId, 'thread')"
+              >
+                <div class="emoji-container">
+                  {{ reaction.nativeEmoji }}
+                </div>
+                <span class="emoji-counter">{{ reaction.amount }}</span>
+                @if (!communicationService.isMobileViewActive) {
+                  <div class="show-who-reacted">
+                    <div class="emoji-container">
+                      {{ reaction.nativeEmoji }}
+                    </div>
+                    @for (user of reaction.user; track user; let index = $index) {
+                      @if (index < 2) {
+                        @if (user == this.firebaseService.currentUserId) {
+                          <span> {{ this.firebaseService.getUserDisplayName(user) }} (Du)</span>
+                        } @else {
+                          <span>{{ this.firebaseService.getUserDisplayName(user) }}</span>
+                        }
+                      }
+                    }
+                    <p>hat reagiert</p>
+                  </div>
+                }
+              </div>
+            }
+            <div class="pointer add-reaction" (click)="this.toggleEmojiPicker(index)">
+              <img src="assets/img/icons/add_reaction_black.png" alt="menu-icon" />
+            </div>
+          </div>
+        </div>
+        <div class="current-user-avatar">
+          <img [src]="this.firebaseService.getUserAvatar(this.firebaseService.currentUserId)" alt="user-avatar" />
+        </div>
+        <!--popUp overlay for editing specific current user msg-->
+        @if (showEditMsgOverlay && msg.messageAnswerId === this.threadService.editMessageAnswerId) {
+          <div class="edit-msg-overlay">
+            <div class="content-container">
+              <form class="edit-msg-form" [formGroup]="newMsgData" (submit)="onSubmitEditMsgAnswer()">
+                <div class="top-section">
+                  <textarea placeholder="Nachricht bearbeiten" formControlName="text"></textarea>
+                </div>
+                <div class="bottom-section">
+                  <div class="bottom-left pointer" (click)="this.toggleEditMsgEmojiPicker()">
+                    <img src="assets/img/icons/add_reaction_black.png" alt="add-reaction-icon" />
+                  </div>
+                  <div class="bottom-right">
+                    <button type="button" class="cancel-btn pointer" (click)="this.handleClickOnCancel()">
+                      <span>Abbrechen</span>
+                    </button>
+                    <button type="submit" class="save-btn pointer">
+                      <span>Speichern</span>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- edit msg emoji Picker-->
+            @if (this.reactionService.showEditMsgEmojiPickerThread) {
+              <div class="current-user-emoji-picker-container">
+                <div class="close-btn pointer" (click)="this.toggleEditMsgEmojiPicker()">
+                  <img src="assets/img/icons/close_black.png" alt="close-icon" />
+                </div>
+                <emoji-mart
+                  [style]="{ width: '200px', height: '350px' }"
+                  [perLine]="1"
+                  [totalFrequentLines]="1"
+                  [darkMode]="true"
+                  [enableFrequentEmojiSort]="true"
+                  [emojiTooltip]="false"
+                  [hideObsolete]="true"
+                  [showSingleCategory]="true"
+                  [enableSearch]="false"
+                  [showPreview]="false"
+                  (emojiClick)="this.handleEditMsgEmojiClick($event)"
+                >
+                </emoji-mart>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- emoji Picker-->
+        @if (index === this.reactionService.emojiPickerIndexThread && this.reactionService.showEmojiPickerThread) {
+          <div class="current-user-emoji-picker-container">
+            <div class="close-btn pointer" (click)="this.toggleEmojiPicker(index)">
+              <img src="assets/img/icons/close_black.png" alt="close-icon" />
+            </div>
+            <emoji-mart
+              [style]="{ width: '200px', height: '350px' }"
+              [perLine]="1"
+              [totalFrequentLines]="1"
+              [darkMode]="true"
+              [enableFrequentEmojiSort]="true"
+              [emojiTooltip]="false"
+              [hideObsolete]="true"
+              [showSingleCategory]="true"
+              [enableSearch]="false"
+              [showPreview]="false"
+              (emojiClick)="this.reactionService.handleReaction($event, msg.messageAnswerId, 'thread')"
+            >
+            </emoji-mart>
+          </div>
+        }
+      </div>
+
+      <!--seperator with answer count-->
+      @if (index == 0) {
+        <div class="msg-answer-counter">
+          @if (this.threadService.msgAnswerList.length == 2) {
+            <span>{{ this.threadService.msgAnswerList.length - 1 }} Anwort</span>
+          } @else {
+            <span>{{ this.threadService.msgAnswerList.length - 1 }} Anworten</span>
+          }
+          <div class="seperator"></div>
+        </div>
+      }
+    }
+  }
+</div>

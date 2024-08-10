@@ -1,0 +1,69 @@
+@import '../../../../styles.scss';
+
+.thread-wrapper {
+  @include dFlex(column, space-between, center);
+  width: 100%;
+  height: calc(100svh - 148px);
+  z-index: 5;
+  position: relative;
+
+  .top-section {
+    @include dFlex(row, space-between, center);
+    width: 100%;
+    height: 110px;
+    padding: 20px 0;
+    gap: 15px;
+    box-shadow: 0px 3px 4px -2px rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-sizing: content-box;
+
+
+    .top-section-left {
+      @include dFlex(row, flex-start, center);
+      width: 205px;
+      height: 33px;
+      gap: 5px;
+      padding: 20px;
+
+      h1 {
+        @include Nunito(700, 24px, 32.74px, $black);
+      }
+
+      span {
+        @include Nunito(400, 14px, 19.1px, $purple-2);
+        text-wrap: nowrap;
+      }
+    }
+
+    .top-section-right {
+      @include dFlex(row, center, center);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      transition: all 0.3s ease-in-out;
+      margin-right: 20px;
+
+      &:hover {
+        background-color: $bg-color;
+      }
+
+      &:hover img {
+        filter: invert(57%) sepia(94%) saturate(4679%) hue-rotate(221deg) brightness(100%) contrast(91%);
+      }
+
+      img {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  .thread-history {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    align-content: start;
+  }
+}

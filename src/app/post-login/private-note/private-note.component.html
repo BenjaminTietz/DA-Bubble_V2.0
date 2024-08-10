@@ -1,0 +1,54 @@
+<div
+  class="private-msg-wrapper"
+  [ngClass]="{
+    'border-radius-unset': this.communicationService.isMobileViewActive,
+    'svh-minus-header': this.communicationService.isMobileViewActive
+  }"
+>
+  <div class="top-section">
+    @for (privateNote of firebaseService.privateNoteList; track privateNote.privatNoteId; let index = $index) {
+      <div class="user-content pointer" (click)="this.communicationService.handleClickCurrentUser(true)">
+        <img [src]="this.firebaseService.getUserAvatar(privateNote.privateNoteCreator)" alt="User Avatar" />
+        <div
+          class="user-status"
+          [ngClass]="{
+            online: this.firebaseService.getUserOnlineStatus(privateNote.privateNoteCreator),
+            offline: !this.firebaseService.getUserOnlineStatus(privateNote.privateNoteCreator)
+          }"
+        ></div>
+        <span>{{ this.firebaseService.getUserDisplayName(privateNote.privateNoteCreator) }} (Du)</span>
+      </div>
+    }
+  </div>
+
+  <div class="chat-history">
+    @for (privateNote of firebaseService.privateNoteList; track privateNote.privatNoteId; let index = $index) {
+      @if (privateNote.privatNoteId === this.chatService.docRef) {
+        @if (chatService.msgList.length === 0) {
+          <div class="empty-chat-overlay">
+            <div class="top-section">
+              <div class="user-avatar">
+                <img [src]="this.firebaseService.getUserAvatar(privateNote.privateNoteCreator)" alt="User Avatar" />
+              </div>
+              <h1 class="pointer" (click)="this.communicationService.handleClickCurrentUser(true)">
+                {{ this.firebaseService.getUserDisplayName(privateNote.privateNoteCreator) + " (Du)" }}
+              </h1>
+            </div>
+            <div class="bottom-section">
+              <span>Dieser Raum ist nur für dich da.</span>
+              <p>
+                Mache dir Notizen, liste deine To-dos auf oder bewahre Links und Dateien griffbereit auf. Du kannst hier
+                auch gerne Dinge mit dir selbst besprechen.
+              </p>
+            </div>
+          </div>
+        }
+      }
+    }
+    <app-chat-history></app-chat-history>
+  </div>
+
+  <div class="chat-input">
+    <app-chat-input labelId="private" (messageEvent)="this.chatService.onMessageSent($event)"></app-chat-input>
+  </div>
+</div>

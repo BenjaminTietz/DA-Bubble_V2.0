@@ -1,0 +1,89 @@
+@import './../../../../styles.scss';
+
+:host {
+  display: block;
+  width: 100%;
+  z-index: 1;
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+header {
+  @include dFlex($jc: space-between);
+  width: 100%;
+  height: $header-height;
+  padding: 0 75px;
+  .logo-with-text {
+    @include dFlex($jc: flex-start);
+    gap: 16px;
+    position: relative;
+    z-index: 3;
+    img {
+      height: 100%;
+    }
+    .span-wrap {
+      overflow-x: hidden;
+      span {
+        position: relative;
+        @include Nunito(700, 24px, normal, $black);
+      }
+    }
+  }
+  .sign-up {
+    @include dFlex($ai: flex-end);
+    flex-direction: column;
+    gap: 10px;
+    span {
+      @include Nunito(400, 18px, 21.6px, $black);
+    }
+    a {
+      @include Figtree(400, 18px, 21.6px, $purple-2);
+      padding: 10px 15px;
+      border-radius: 30px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.1s;
+      &:hover {
+        border: 1px solid $light-purple-lines;
+        font-variation-settings: 'wght' 500;
+        padding: 10px 14.5px;
+      }
+    }
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: linear-gradient(#797ef3, #313ae5);
+  z-index: 2;
+}
+
+@media screen and (max-width: 650px) {
+  :host {
+    position: static;
+  }
+  .sign-up {
+    display: none !important;
+  }
+  header {
+    padding-left: calc(50% - 168px / 2);
+    padding-right: 0;
+    height: 80px;
+    .logo-with-text {
+      img {
+        height: 56px;
+        width: 56px;
+      }
+      .span-wrap {
+        span {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}

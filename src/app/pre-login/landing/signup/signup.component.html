@@ -1,0 +1,65 @@
+<h1>Konto <br class="visible-mobile" />erstellen</h1>
+<h2>Mit deinem Namen und deiner E-Mail-Adresse hast du dein neues DABubble-Konto</h2>
+<form [formGroup]="signupForm" (ngSubmit)="onSubmit()" autocomplete="off">
+  <div class="input-with-error">
+    <div class="input-box">
+      <img src="assets/img/icons/person_filled.png" />
+      <input type="text" placeholder="Name und Nachname" formControlName="username" autocomplete="off" />
+    </div>
+    @if (formInvalid(signupForm.controls.username)) {
+      @if (
+        signupForm.controls.username.errors?.["required"] || signupForm.controls.username.errors?.["fullNameValidator"]
+      ) {
+        <p class="error-message">*Bitte Vor & Nachnamen eingeben!</p>
+      }
+    }
+  </div>
+  <div class="input-with-error">
+    <div class="input-box">
+      <img src="assets/img/icons/email.png" />
+      <input type="text" placeholder="beispielname@email.com" formControlName="email" autocomplete="off" />
+    </div>
+    @if (formInvalid(signupForm.controls.email)) {
+      @if (signupForm.controls.email.errors?.["required"]) {
+        <p class="error-message">*Bitte schreiben Sie eine E-Mail-Adresse.</p>
+      }
+      @if (signupForm.controls.email.errors?.["email"]) {
+        <p class="error-message">*Dies ist keine gültige E-Mail-Adresse</p>
+      }
+    }
+  </div>
+  <div class="input-with-error">
+    <div class="input-box">
+      <img src="assets/img/icons/password.png" />
+      <input type="{{ inputType }}" placeholder="Passwort" formControlName="password" autocomplete="off" />
+      <img src="{{ visibilityIcon }}" alt="" class="visibility-icon" (click)="changePasswordVisibility()" />
+    </div>
+    @if (formInvalid(signupForm.controls.password)) {
+      @if (signupForm.controls.password.errors?.["required"]) {
+        <p class="error-message">*Bitte geben Sie ein Passwort ein.</p>
+      }
+      @if (signupForm.controls.password.errors?.["minlength"]) {
+        <p class="error-message">*Das Passwort muss mindestens 6 Zeichen lang sein.</p>
+      }
+    }
+  </div>
+  <div class="input-with-error">
+    <div class="privacy-wrap">
+      <input type="checkbox" name="privacy" formControlName="privacy" />
+      <span>Ich stimme der</span>
+      <a href="">Datenschutzerklärung</a>
+      <span>zu.</span>
+    </div>
+    @if (formInvalid(signupForm.controls.privacy)) {
+      @if (signupForm.controls.privacy.errors?.["required"]) {
+        <p class="error-message">*Bitte stimmen Sie der Datenschutzerklärung zu.</p>
+      }
+    }
+  </div>
+  <div class="button-wrap">
+    <button class="button-blue" type="submit" [disabled]="!signupForm.valid">Weiter</button>
+  </div>
+</form>
+<button class="back-button" routerLink="">
+  <img src="assets/img/icons/arrow_back.png" />
+</button>

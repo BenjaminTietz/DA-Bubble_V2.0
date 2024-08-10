@@ -1,0 +1,486 @@
+@import '@ctrl/ngx-emoji-mart/picker';
+
+$bg-color: #eceefe;
+$white: #ffffff;
+$black: #000000;
+$purple-1: #444df2;
+$purple-2: #797ef3;
+$purple-3: #535af1;
+$light-purple-lines: #adb0d9;
+$menu-color: #42526e;
+$text-gray: #686868;
+$light-gray: #d9d9d9;
+$disabled-btn: #bdbdbd;
+$online-green: #92c83e;
+$offline-gray: #686868;
+$online-red: #f44336;
+$rosa-error: #ed1e79;
+$email-blue: #1381ff;
+// example usage
+// background-color: $bg-color;
+$header-height: 120px;
+$footer-height: 90px;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: $bg-color;
+  overflow: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', Calibri, 'Trebuchet MS', sans-serif;
+  box-sizing: border-box;
+  font-variation-settings: 'wght' 400;
+}
+
+@mixin dFlex($fd: row, $jc: center, $ai: center) {
+  display: flex;
+  flex-direction: $fd;
+  justify-content: $jc;
+  align-items: $ai;
+}
+
+@mixin buttonBlue() {
+  @include Nunito(700, 18px, 24.55px, $white);
+  background-color: $purple-1;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+
+  &:hover {
+    background-color: $purple-2;
+    transition: all 0.1s ease-in;
+    cursor: pointer;
+  }
+
+  &:active {
+    background-color: $purple-1;
+    color: $white;
+    transition: all 0.1s ease-in;
+  }
+
+  &:disabled {
+    background-color: $text-gray;
+    cursor: not-allowed;
+    transition: all 0.1s ease-in;
+  }
+}
+
+@mixin buttonWhite() {
+  @include Nunito(700, 18px, 24.55px, $purple-1);
+  background-color: $white;
+  border: 1px solid $purple-2;
+  padding: 12px 25px;
+  border-radius: 25px;
+
+  &:hover {
+    background-color: $purple-3;
+    color: $white;
+    cursor: pointer;
+    transition: all 0.1s ease-in;
+  }
+
+  &:active {
+    background-color: $purple-1;
+    color: $white;
+    transition: all 0.1s ease-in;
+  }
+
+  &:disabled {
+    color: $text-gray;
+    border: $text-gray;
+    cursor: not-allowed;
+    transition: all 0.1s ease-in;
+  }
+}
+
+@mixin errorMessage {
+  @include Nunito(400, 14px, 19.1px, $rosa-error);
+  margin-top: 6px;
+  margin-bottom: -6px;
+  height: 0px;
+}
+
+@mixin inputField() {
+  padding: 18px 20px 18px 35px;
+  border-radius: 25px;
+  border: 1px solid $purple-2;
+  width: 100%;
+  @include Nunito(400, 18px, 24.55px, $black);
+  outline: none;
+
+  &::placeholder {
+    @include Nunito(400, 18px, 24.55px, $text-gray);
+  }
+}
+
+@mixin Nunito($weight, $size, $line-height, $color) {
+  font-family: 'Nunito', sans-serif;
+  font-variation-settings: 'wght' $weight;
+  font-size: $size;
+  line-height: $line-height;
+  color: $color;
+}
+
+@mixin OpenSans($weight, $size, $line-height, $color) {
+  font-family: 'Open Sans', sans-serif;
+  font-variation-settings: 'wght' $weight;
+  font-size: $size;
+  line-height: $line-height;
+  color: $color;
+}
+
+@mixin Figtree($weight, $size, $line-height, $color) {
+  font-family: 'Figtree', sans-serif;
+  font-variation-settings: 'wght' $weight;
+  font-size: $size;
+  line-height: $line-height;
+  color: $color;
+}
+
+@mixin btnHover($color) {
+  background-color: darken($color, 10%);
+  transition: all 175ms ease-in;
+}
+
+@mixin btnActive($color) {
+  background-color: darken($color, 15%);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.1);
+  transition: all 175ms ease-in;
+}
+
+//example usage
+
+// @include Nunito(400, 16px, 18.8px, $red);
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('assets/fonts/Nunito/Nunito-VariableFont_wght.ttf') format('truetype');
+  font-weight: 125 950;
+  font-stretch: 75% 125%;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('assets/fonts/Open_Sans/OpenSans-Variable.ttf') format('truetype');
+  font-weight: 125 950;
+  font-stretch: 75% 125%;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Figtree';
+  src: url('assets/fonts/Figtree/Figtree-VariableFont_wght.ttf') format('truetype');
+  font-weight: 125 950;
+  font-stretch: 75% 125%;
+  font-style: normal;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+// global style for the chat / message input field
+
+.input-container {
+  width: 100%;
+  padding: 20px;
+  height: 145px;
+  border-radius: 20px;
+  border: 1px solid $purple-2;
+
+  > textarea {
+    width: 100%;
+    height: 60%;
+    border: none;
+    outline: none;
+    resize: none;
+    @include Nunito(400, 16px, 21.82px, $black);
+  }
+
+  > .button-container {
+    @include dFlex(space-between, center);
+
+    > .left-section {
+      @include dFlex(center, center);
+      gap: 16px;
+
+      > .icon {
+        width: 24px;
+        height: 24px;
+      }
+
+      > span {
+        @include Nunito(700, 16px, 21.82px, $text-gray);
+      }
+    }
+  }
+}
+
+.chat-input {
+  width: 100%;
+  padding: 20px;
+}
+
+.chat-history {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  align-content: end;
+}
+
+.chat-history-wrapper {
+  height: fit-content;
+}
+
+.thread-history {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.d-none {
+  display: none !important;
+}
+
+.absolute {
+  position: absolute !important;
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+// global style for user status
+.offline {
+  background-color: $offline-gray;
+}
+
+.online {
+  background-color: $online-green;
+}
+
+.offline-text {
+  color: $offline-gray !important;
+}
+
+.online-text {
+  color: $online-green !important;
+}
+
+.input-warning {
+  border: 1px solid $rosa-error !important;
+}
+
+.d-none {
+  display: none !important;
+}
+
+//custom scrollbar
+::-webkit-scrollbar {
+  width: 6px;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: $purple-2;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: $light-purple-lines;
+  border-radius: 8px;
+  margin: 10px;
+}
+
+// search results for header and new-message
+.search-results {
+  width: 100%;
+  padding: 20px;
+  border-radius: 30px;
+
+  .content-container {
+    @include dFlex(row, space-between, center);
+    width: 100%;
+    height: 58px;
+    border-radius: 35px;
+    gap: 15px;
+    transition: ease-in-out 0.1s;
+
+    &:hover {
+      background-color: $bg-color;
+    }
+
+    span {
+      @include Nunito(400, 18px, 24.55px, $black);
+    }
+  }
+}
+
+// glogal style for displaying selcted users in create-channel & add-member-to-channel & new-message
+
+.show-selected-users {
+  @include dFlex(row, flex-start, center);
+  flex-wrap: wrap;
+  max-width: 100%;
+  height: fit-content;
+  gap: 8px;
+}
+
+.added-data {
+  @include dFlex(row, flex-start, center);
+  height: 40px;
+  border-radius: 35px;
+  padding: 3px 20px 3px 20px;
+  gap: 15px;
+  background-color: $bg-color;
+  transition: ease-in-out 0.1s;
+
+  &:hover {
+    background-color: darken($bg-color, 10%);
+    transform: scale(1.05);
+  }
+
+  img:first-child {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+  }
+
+  img:last-child {
+    width: 24px;
+    height: 24px;
+    align-self: center;
+  }
+
+  span {
+    @include Nunito(400, 18px, 24.55px, $black);
+    text-wrap: nowrap;
+  }
+
+  .remove {
+    @include dFlex(row, center, center);
+    width: 30px;
+    height: 30px;
+
+    img {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.round-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background-color: $bg-color;
+  @include dFlex(row, center, center);
+
+  &:hover {
+    @include btnHover($bg-color);
+  }
+
+  &:active {
+    @include btnActive($bg-color);
+  }
+}
+
+.close-btn {
+  @include dFlex(row, center, center);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: ease-in-out 0.1s;
+  z-index: 10;
+
+  &:hover {
+    background-color: $bg-color;
+  }
+
+  &:hover img {
+    filter: invert(57%) sepia(94%) saturate(4679%) hue-rotate(221deg) brightness(100%) contrast(91%);
+  }
+}
+
+// global style for mobileViewActive
+
+.border-radius-unset {
+  border-radius: unset !important;
+}
+
+.padding-unset {
+  padding: unset !important;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.full-width-minus-sidenav {
+  width: calc(100% - 422px) !important; //sidenav width 366px + 24px gap  +32px padding
+}
+
+.half-width {
+  width: 50% !important;
+}
+
+.margin-unset {
+  margin: unset !important;
+}
+
+.svh-100 {
+  height: 100svh !important;
+}
+
+.svw-100 {
+  width: 100svw !important;
+}
+
+.svh-minus-header {
+  height: calc(100svh - 80px) !important;
+}
+
+.overflow-y-auto {
+  overflow-y: auto !important;
+}
+
+.absolute-sidenav {
+  position: absolute !important;
+  left: 16px !important;
+  top: 16px !important;
+  width: 366px !important;
+  height: calc(100svh - 148px) !important;
+  box-shadow: 10px 0px 10px -10px rgba(0, 0, 0, 0.1);
+  border-radius: unset !important;
+}
+
+.absolute {
+  position: absolute !important;
+}
+
+.header-mobile-in-sidenav {
+  width: 100% !important;
+  border: 1px solid $purple-3 !important;
+  border-radius: 42px;
+  margin: unset !important;
+
+  &:focus {
+    border: 2px solid $purple-3;
+  }
+}
+
+.space-arround {
+  justify-content: space-around !important;
+}
+
+.shadow {
+  box-shadow: -2px 11px 12px 0px rgba(0, 0, 0, 0.5);
+}

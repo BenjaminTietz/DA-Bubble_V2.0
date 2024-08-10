@@ -1,0 +1,50 @@
+@import '../../../../../../styles.scss';
+
+.private-msg-wrapper {
+  @include dFlex(column, flex-start, flex-start);
+  width: 100%;
+  gap: 25px;
+  margin-top: 24px;
+}
+
+.private-msg-container {
+  @include dFlex(row, flex-start, center);
+  width: fit-content;
+  padding-left: 16px;
+  padding-right: 16px;
+  height: 58px;
+  gap: 15px;
+  border-radius: 30px;
+  background-color: $white;
+
+  .user-avatar {
+    position: relative;
+
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .user-status {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid $white;
+      position: absolute;
+      top: 28px;
+      left: 24px;
+    }
+  }
+  span {
+    @include Nunito(400, 18px, 24.55px, $black);
+  }
+  &:hover {
+    background-color: $bg-color;
+  }
+  &.active {
+    background-color: $bg-color;
+    span {
+      @include Nunito(700, 18px, 24.55px, $purple-3);
+    }
+  }
+}

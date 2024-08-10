@@ -1,0 +1,224 @@
+@import './../../../../styles.scss';
+
+:host {
+  @include dFlex();
+  flex-direction: column;
+  gap: 32px;
+  max-width: 500px;
+}
+
+h1 {
+  @include Nunito(700, 46px, 55.2px, $purple-1);
+}
+
+h2 {
+  @include Nunito(400, 20px, 24px, $black);
+  text-align: center;
+}
+
+form {
+  @include dFlex();
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.input-with-error {
+  width: 100%;
+}
+
+.input-box {
+  @include dFlex($jc: flex-start);
+  gap: 32px;
+  background-color: $bg-color;
+  width: 100%;
+  height: 60px;
+  border: 1px solid transparent;
+  border-radius: 30px;
+  padding: 0 32px;
+  transition: all 0.1s;
+  img {
+    max-width: 20px;
+    max-height: 21px;
+    transition: all 0.1s;
+  }
+  input {
+    @include Nunito(500, 18px, 21.6px, $text-gray);
+    background-color: transparent;
+    border: none;
+    flex-grow: 1;
+    width: calc(100% - 32px - 64px);
+    height: 100%;
+  }
+  .visibility-icon {
+    cursor: pointer;
+    filter: invert(41%) sepia(0%) saturate(0%) hue-rotate(68deg) brightness(96%) contrast(91%);
+    &:hover {
+      filter: none;
+    }
+    &:active {
+      filter: invert(41%) sepia(0%) saturate(0%) hue-rotate(68deg) brightness(96%) contrast(91%);
+    }
+  }
+  &:hover {
+    border: 1px solid $text-gray;
+  }
+  &:focus-within {
+    border: 1px solid $purple-3;
+    img:not(.visibility-icon) {
+      filter: saturate(0%) brightness(0%);
+    }
+    input {
+      outline: none;
+      color: $black;
+    }
+  }
+}
+
+.error-message {
+  @include errorMessage();
+}
+
+.separator {
+  @include dFlex($ai: flex-end);
+  width: 100%;
+  height: 1px;
+  background-color: $light-purple-lines;
+  margin-top: 18.55px;
+  span {
+    @include Nunito(400, 18px, 24.55px, $black);
+    margin-bottom: -6px;
+    background-color: $white;
+    padding: 0 15px;
+    line-height: 24.55px;
+  }
+}
+
+.login-with-google {
+  @include dFlex();
+  gap: 20px;
+  background-color: $bg-color;
+  width: 100%;
+  height: 60px;
+  padding: 0 32px;
+  border: 1px solid transparent;
+  border-radius: 30px;
+  transition: all 0.1s;
+  cursor: pointer;
+  img {
+    width: 38px;
+  }
+  span {
+    @include Nunito(400, 18px, 21.6px, $purple-1);
+    transition: all 0.1s;
+  }
+  &:hover {
+    border: 1px solid $purple-1;
+    span {
+      font-variation-settings: 'wght' 700;
+    }
+  }
+  &:active {
+    border: 1px solid $text-gray;
+    span {
+      font-variation-settings: 'wght' 400;
+    }
+  }
+}
+
+.button-wrap {
+  @include dFlex();
+  gap: 30px;
+  .button-blue {
+    @include buttonBlue();
+  }
+
+  .button-white {
+    @include buttonWhite();
+  }
+}
+
+a {
+  @include Figtree(400, 18px, 21.6px, $purple-2);
+  padding: 10px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.1s;
+  &:hover {
+    background-color: $bg-color;
+    font-variation-settings: 'wght' 500;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  :host {
+    max-width: 100%;
+    gap: 22px;
+  }
+
+  h1 {
+    font-size: 32px;
+    line-height: normal;
+  }
+
+  h2 {
+    font-size: 14px;
+    line-height: normal;
+  }
+
+  form {
+    gap: 22px;
+  }
+
+  .input-box {
+    height: 42px;
+    gap: 22px;
+    padding: 0 22px;
+    input {
+      font-size: 12px;
+      line-height: normal;
+    }
+    img {
+      max-width: 16px;
+      max-height: 17px;
+    }
+  }
+
+  a {
+    font-size: 12px;
+  }
+
+  .separator {
+    span {
+      font-size: 12px;
+    }
+  }
+
+  .login-with-google {
+    height: 42px;
+    span {
+      font-size: 12px;
+    }
+    img {
+      width: 28px;
+    }
+  }
+
+  .button-wrap {
+    .button-blue {
+      font-size: 12px;
+      padding: 8px 18px;
+    }
+    .button-white {
+      font-size: 12px;
+      padding: 8px 18px;
+    }
+  }
+
+  .error-message {
+    font-size: 10px;
+    line-height: normal;
+    margin-top: 3px;
+    margin-bottom: -3px;
+  }
+}

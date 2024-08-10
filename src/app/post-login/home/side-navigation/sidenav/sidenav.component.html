@@ -1,0 +1,74 @@
+<div class="sidenav-wrapper" [ngClass]="{
+    'border-radius-unset': this.communicationService.isMobileViewActive,
+    'svh-minus-header': this.communicationService.isMobileViewActive,
+    'full-width': this.communicationService.isMobileViewActive
+  }">
+  <div class="sidenav-content" [ngClass]="{
+      'full-width': this.communicationService.isMobileViewActive
+    }">
+    @if (!this.communicationService.isMobileViewActive) {
+    <div class="sidenav-top-section">
+      <div class="sidenav-headline-left">
+        <img class="sidenav-logo" src="assets/img/logos/workspace_logo.png" alt="logo" />
+        <h1>Devspace</h1>
+      </div>
+      <div (click)="handleOpenNewMessage()" class="sidenav-headline-right pointer">
+        <img src="assets/img/icons/edit_square_black.png" alt="edit-icon" />
+      </div>
+    </div>
+    }
+    <!--mobile version of normal header-->
+    @if (this.communicationService.isMobileViewActive) {
+    <div class="header-container" [ngClass]="{ 'full-width': this.communicationService.isMobileViewActive }">
+      <app-header></app-header>
+    </div>
+    }
+
+    <div class="channels-container">
+      <div class="channels-headline-wrapper">
+        <div class="pointer channels-sidenav-left" (click)="toggleChannels()">
+          <img [ngClass]="{ 'rotate-90-plus': chanListExpanded, 'rotate-back': !chanListExpanded }"
+            src="assets/img/icons/arrow_drop_down_closed_black.png" alt="arrow-icon" />
+          <img src="assets/img/icons/workspaces_black.png" alt="workspaces-icon" />
+          <h2>Channels</h2>
+        </div>
+        <div class="channels-sidenav-right pointer" (click)="toggleCreateChannelVisibility()">
+          <img src="assets/img/icons/add_black.png" alt="add-icon" />
+        </div>
+      </div>
+
+      @if (chanListExpanded) {
+      <div class="channels-content-container">
+        <div class="channels-content">
+          <app-channel-list></app-channel-list>
+        </div>
+        <div class="pointer add-channel" (click)="toggleCreateChannelVisibility()">
+          <img src="assets/img/icons/add_circle_black.png" alt="add-icon" />
+          <span>Channel hinzufügen</span>
+        </div>
+      </div>
+      }
+    </div>
+
+    <div class="private-msg-container">
+      <div class="pointer private-msg-headline" (click)="togglePrivateMessages()">
+        <img [ngClass]="{ 'rotate-90-plus': privateMsgListExpanded, 'rotate-back': !privateMsgListExpanded }"
+          src="assets/img/icons/arrow_drop_down_closed_black.png" alt="arrow-icon" />
+        <img src="assets/img/icons/account_circle_black.png" alt="account-circle-icon" />
+        <h2>Direktnachrichten</h2>
+      </div>
+      @if (privateMsgListExpanded) {
+      <div class="private-msg-content">
+        <app-private-message-list></app-private-message-list>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!--mobile button for new-message component-->
+  @if (this.communicationService.isMobileViewActive) {
+  <div class="mobile-new-msg-button pointer" (click)="handleOpenNewMessage()">
+    <img src="assets/img/icons/edit_square_white.png" alt="edit-icon" />
+  </div>
+  }
+</div>

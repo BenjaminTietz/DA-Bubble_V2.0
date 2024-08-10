@@ -1,0 +1,241 @@
+@import '../../../../../styles.scss';
+
+.sidenav-wrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100svh - 148px);
+  border-radius: 30px;
+  padding: 32px 30px 32px 30px;
+  background-color: $white;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidenav-content {
+  @include dFlex(column, flex-start, flex-start);
+  width: 306px;
+  height: 100%;
+  gap: 25px;
+}
+
+.sidenav-top-section {
+  width: 100%;
+  margin-bottom: 32px;
+  margin-top: 16px;
+  gap: 4px;
+  @include dFlex(row, space-between, center);
+
+  h1 {
+    margin: unset !important;
+    white-space: nowrap;
+    @include Nunito(700, 24px, 32.74px, $black);
+  }
+}
+
+.sidenav-headline-left {
+  @include dFlex(row, flex-start, center);
+  width: 250px;
+  height: 60px;
+  padding: 0px 20px 0px 0px;
+  gap: 15px;
+}
+
+.sidenav-logo {
+  height: 60px;
+  width: 60px;
+}
+
+.sidenav-headline-right {
+  @include dFlex(row, center, center);
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  padding: 8px;
+  gap: 10px;
+  transition: ease-in-out 0.1s;
+
+  &:hover {
+    background-color: $bg-color;
+  }
+
+  &:hover img {
+    filter: invert(57%) sepia(94%) saturate(4679%) hue-rotate(221deg) brightness(100%) contrast(91%);
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.channels-container {
+  @include dFlex(row, flex-start, flex-start);
+  flex-direction: column;
+  width: 100%;
+  max-height: 50%;
+}
+
+.channels-headline-wrapper {
+  @include dFlex(row, space-between, center);
+  width: 100%;
+
+  h2 {
+    @include Nunito(700, 20px, 27.28px, $black);
+  }
+}
+
+.channels-sidenav-left {
+  @include dFlex(row, flex-start, center);
+  gap: 10px;
+
+  &:hover h2 {
+    @include Nunito(700, 20px, 27.28px, $purple-3);
+  }
+
+  &:hover img {
+    filter: invert(50%) sepia(37%) saturate(6446%) hue-rotate(220deg) brightness(99%) contrast(93%);
+  }
+
+  h2 {
+    @include Nunito(700, 20px, 27.28px, $black);
+  }
+}
+
+.channels-sidenav-right {
+  @include dFlex(row, center, center);
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  padding: 8px;
+  gap: 10px;
+  transition: ease-in 0.1s;
+
+  &:hover {
+    background-color: $bg-color;
+  }
+
+  &:hover img {
+    filter: invert(57%) sepia(94%) saturate(4679%) hue-rotate(221deg) brightness(100%) contrast(91%);
+  }
+
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.channels-content {
+  max-height: 300px;
+  width: 100%;
+  overflow-y: auto;
+
+  span {
+    @include Nunito(400, 18px, 24.55px, $black);
+  }
+}
+
+.add-channel {
+  @include dFlex(row, flex-start, center);
+  gap: 10px;
+  margin-left: 12px;
+
+  span {
+    @include Nunito(400, 18px, 24.55px, $black);
+  }
+
+  &:hover span {
+    color: $purple-3;
+  }
+
+  &:hover img {
+    filter: invert(50%) sepia(37%) saturate(6446%) hue-rotate(220deg) brightness(99%) contrast(93%);
+  }
+}
+
+.private-msg-container {
+  @include dFlex(column, flex-start, flex-start);
+  width: 100%;
+  max-height: 50%;
+
+  span {
+    @include Nunito(700, 20px, 27.28px, $black);
+  }
+}
+
+.private-msg-headline {
+  @include dFlex(row, flex-start, center);
+  gap: 10px;
+
+  h2 {
+    @include Nunito(700, 20px, 27.28px, $black);
+  }
+
+  &:hover {
+    h2 {
+      @include Nunito(700, 20px, 27.28px, $purple-3);
+    }
+  }
+
+  &:hover img {
+    filter: invert(50%) sepia(37%) saturate(6446%) hue-rotate(220deg) brightness(99%) contrast(93%);
+  }
+}
+
+.private-msg-content {
+  max-height: 260px;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.rotate-90-plus {
+  transform: rotate(90deg);
+  transition: transform 0.175s ease-in-out;
+}
+
+.rotate-back {
+  transform: rotate(0deg);
+  transition: transform 0.175s ease-in-out;
+}
+
+// SideNav end
+
+//<!--mobile button for new-message component-->
+
+.mobile-new-msg-button {
+  @include dFlex(row, center, center);
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+  background-color: $purple-1;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  transition: ease-in-out 0.1s;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+
+  &:hover {
+    background-color: $purple-2;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+}
+
+.header-container {
+  padding: 0px 20px;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 850px) {
+  .sidenav-wrapper {
+    padding: 16px 10px 16px 10px;
+  }
+}
+
+@media screen and (max-width: 376px) {
+  .sidenav-wrapper {
+    overflow-x: hidden;
+  }
+}

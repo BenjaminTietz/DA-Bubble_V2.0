@@ -1,0 +1,21 @@
+<div class="header-wrapper">
+  <div class="header-container">
+    @if (this.communicationService.isSidenavVisible && !this.communicationService.isRouterOutletVisible) {
+    <div class="logo-container">
+      <img class="" src="assets/img/logos/da_bubble_logo.png" alt="" />
+      <span class="headline">DABubble</span>
+    </div>
+    }
+    @if (!this.communicationService.isSidenavVisible || this.communicationService.isRouterOutletVisible ||
+    this.communicationService.isThreadVisible) {
+    <div class="back-to-sidenav pointer" (click)="handleBackButtonClick()">
+      <img src="assets/img/icons/arrow_left_back.png" alt="Back" />
+      <img src="assets/img/logos/workspace_logo.png" alt="devSpace" />
+      <span class="headline">Devspace</span>
+    </div>
+    }
+    <div class="user-avatar pointer" (click)="this.communicationService.toggleMobileUserMenu()">
+      <img src="{{ this.firebaseService.getUserAvatar(this.firebaseService.currentUserId) }}" alt="User Image" />
+    </div>
+  </div>
+</div>

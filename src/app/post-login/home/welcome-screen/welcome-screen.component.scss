@@ -1,0 +1,79 @@
+@import '../../../../styles.scss';
+@import '../../home/header/header.component.scss';
+
+.welcome-screen-wrapper {
+  @include dFlex(column, space-around, center);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  background-color: $white;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Optional: fügt einen Schatten hinzu, um den Inhalt hervorzuheben
+  overflow-y: auto;
+
+  .logo-container {
+    @include dFlex(row, center, center);
+    gap: 16px;
+    position: relative;
+    animation: slideInFromRight 1s ease-out forwards;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+  }
+
+  @keyframes slideInFromRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  h1 {
+    @include Nunito(700, 24px, 32.73px, $black);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  p {
+    @include Nunito(400, 16px, 24px, $text-gray);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  ul {
+    @include Nunito(400, 16px, 24px, $text-gray);
+    list-style-type: disc;
+    margin: 0;
+    padding-left: 20px;
+
+    li {
+      margin-bottom: 10px;
+
+      strong {
+        color: $black;
+      }
+
+      ul {
+        list-style-type: circle;
+        padding-left: 20px;
+
+        li {
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+
+  h2,
+  h3 {
+    @include Nunito(700, 20px, 28px, $black);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+}

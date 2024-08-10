@@ -1,0 +1,215 @@
+<div
+  class="header-wrapper"
+  [ngClass]="{
+    'full-width': this.communicationService.isMobileViewActive
+  }"
+>
+  <div
+    class="header-container"
+    [ngClass]="{
+      'padding-unset': this.communicationService.isMobileViewActive,
+      'full-width': this.communicationService.isMobileViewActive
+    }"
+  >
+    @if (!this.communicationService.isMobileViewActive) {
+      <div class="logo-container">
+        <img class="" src="assets/img/logos/da_bubble_logo.png" alt="" />
+        <span class="headline">DABubble</span>
+      </div>
+    }
+    <div
+      class="searchbar-container"
+      [ngClass]="{
+        'header-mobile-in-sidenav': this.communicationService.isMobileViewActive
+      }"
+    >
+      <form class="" [formGroup]="searchText">
+        <input
+          class="header-searchbar"
+          type="text"
+          placeholder="Devspace durchsuchen"
+          formControlName="search"
+          (input)="this.handleSearch()"
+          (click)="this.handleToggleFocus()"
+        />
+      </form>
+
+      <!-- onFocus -->
+      @if (
+        this.searchText.value &&
+        this.communicationService.isHeaderInputVisible &&
+        !this.searchService.searchSpecificChannelMessageResults.length &&
+        !this.searchService.searchSpecificThreadMessageResults.length
+      ) {
+        <div class="search-results shadow">
+          <div class="close-btn pointer" (click)="this.handleToggleFocus()">
+            <img src="assets/img/icons/close_black.png" alt="" />
+          </div>
+          <h3>User:</h3>
+          @for (user of this.firebaseService.userList; track user; let index = $index) {
+            @if (index < 3 && user.userId !== this.firebaseService.currentUserId) {
+              <div class="member-container pointer mb-8 width100 jc-unset" (click)="handleClickOnMember(user.userId)">
+                <div class="user-avatar">
+                  <img [src]="this.firebaseService.getUserAvatar(user.userId)" alt="User Avatar" />
+                  <div
+                    class="user-status"
+                    [ngClass]="{
+                      online: this.firebaseService.getUserOnlineStatus(user.userId),
+                      offline: !this.firebaseService.getUserOnlineStatus(user.userId)
+                    }"
+                  ></div>
+                </div>
+                <span>{{ this.firebaseService.getUserDisplayName(user.userId) }}</span>
+              </div>
+            }
+          }
+          <h3>Channels:</h3>
+          @for (channel of this.firebaseService.channelList; track channel; let index = $index) {
+            @if (index < 3) {
+              <div class="content-container pointer" (click)="handleClickOnChannel(channel.chanId)">
+                <span>{{ "#" + channel.name }}</span>
+              </div>
+            }
+          }
+        </div>
+      }
+
+      <!-- Search resault msg -->
+      @if (
+        (this.communicationService.showUsers && this.communicationService.isHeaderInputVisible) ||
+        this.communicationService.showChannels ||
+        this.searchService.searchSpecificChannelMessageResults.length ||
+        this.searchService.searchSpecificThreadMessageResults.length
+      ) {
+        <div class="search-results shadow">
+          <div class="close-btn pointer" (click)="this.handleToggleFocus()">
+            <img src="assets/img/icons/close_black.png" alt="" />
+          </div>
+          <!--thread msg-->
+          @if (
+            this.searchService.searchSpecificThreadMessageResults.length &&
+            !this.communicationService.isMobileViewActive
+          ) {
+            <h3>Thread Messages:</h3>
+            @for (
+              threadMessage of this.searchService.searchSpecificThreadMessageResults;
+              track threadMessage;
+              let index = $index
+            ) {
+              @if (index === 0) {
+                <div
+                  class="message-container pointer"
+                  (click)="closeSearchAfterThreadClick(threadMessage.messageAnswerId)"
+                >
+                  <div class="message-avatar">
+                    <img [src]="this.firebaseService.getUserAvatar(threadMessage.messageSendBy)" alt="User Avatar" />
+                    <div class="message-avatar-name">
+                      <span>{{ this.firebaseService.getUserDisplayName(threadMessage.messageSendBy) }}</span>
+                    </div>
+                  </div>
+                  <div class="message-text">
+                    <span
+                      >Datum: {{ threadMessage.date }}
+                      {{ this.convertUnixTimestampToTime(threadMessage.time) }}Uhr</span
+                    >
+                    <span>Nachricht:</span>
+                    <span>{{ threadMessage.text }}</span>
+                  </div>
+                </div>
+              }
+            }
+          }
+
+          <!-- channel msg search result -->
+          @if (
+            this.searchService.searchSpecificChannelMessageResults.length &&
+            !this.communicationService.isMobileViewActive
+          ) {
+            <h3>Channel Messages:</h3>
+            @for (
+              message of this.searchService.searchSpecificChannelMessageResults;
+              track message;
+              let index = $index
+            ) {
+              @if (index === 0) {
+                <div class="message-container pointer" (click)="this.closeSearchAfterMessageClick(message.messageId)">
+                  <div class="message-avatar">
+                    <img [src]="this.firebaseService.getUserAvatar(message.messageSendBy)" alt="User Avatar" />
+                    <div class="message-avatar-name">
+                      <span>{{ this.firebaseService.getUserDisplayName(message.messageSendBy) }}</span>
+                    </div>
+                  </div>
+                  <div class="message-text">
+                    <span>Datum: {{ message.date }} {{ this.convertUnixTimestampToTime(message.time) }}Uhr</span>
+                    <span>Nachricht:</span>
+                    <span>{{ message.text }}</span>
+                  </div>
+                </div>
+              }
+            }
+          }
+          @if (
+            this.communicationService.showUsers &&
+            !this.communicationService.isHeaderInputVisible &&
+            this.searchService.userSearchResults.length &&
+            this.searchText.value
+          ) {
+            <h3>User:</h3>
+            @for (userId of this.searchService.userSearchResults; track userId; let index = $index) {
+              @if (index < 3 && userId !== this.firebaseService.currentUserId) {
+                <div class="member-container pointer mb-8 width100 jc-unset" (click)="handleClickOnMember(userId)">
+                  <div class="user-avatar">
+                    <img [src]="this.firebaseService.getUserAvatar(userId)" alt="User Avatar" />
+                    <div
+                      class="user-status"
+                      [ngClass]="{
+                        online: this.firebaseService.getUserOnlineStatus(userId),
+                        offline: !this.firebaseService.getUserOnlineStatus(userId)
+                      }"
+                    ></div>
+                  </div>
+                  <span>{{ this.firebaseService.getUserDisplayName(userId) }}</span>
+                </div>
+              }
+            }
+          } @else if (!this.searchService.userSearchResults.length && this.searchText.value) {
+            <h3>User:</h3>
+            <h3>Es wurde kein Nutzer gefunden.</h3>
+          }
+
+          <!--channel search results-->
+          @if (this.communicationService.showChannels && this.searchService.channelSearchResults.length) {
+            <h3>Channels:</h3>
+            @for (channel of this.searchService.channelSearchResults; track channel; let index = $index) {
+              @if (index < 3) {
+                <div class="content-container pointer" (click)="handleClickOnChannel(channel)">
+                  <span>#{{ this.firebaseService.getChannelNameById(channel) }} </span>
+                </div>
+              }
+            }
+          } @else if (!this.searchService.channelSearchResults.length && this.searchText.value) {
+            <h3>Channels:</h3>
+
+            <h3>Es wurde kein Channel gefunden.</h3>
+          }
+        </div>
+      }
+    </div>
+    @if (!this.communicationService.isMobileViewActive) {
+      <div class="user-avatar pointer" (click)="toggleUserProfile(true)">
+        <span class="headline">{{ this.firebaseService.getUserDisplayName(this.firebaseService.currentUserId) }}</span>
+        <img src="{{ this.firebaseService.getUserAvatar(this.firebaseService.currentUserId) }}" alt="User Image" />
+        <div
+          class="user-status"
+          [ngClass]="{
+            online: this.firebaseService.getUserOnlineStatus(this.firebaseService.currentUserId),
+            offline: !this.firebaseService.getUserOnlineStatus(this.firebaseService.currentUserId)
+          }"
+        ></div>
+        <div class="drop-down">
+          <img class="" src="assets/img/icons/keyboard_arrow_down_black.png" alt="Dropdown Arrow" />
+        </div>
+      </div>
+    }
+  </div>
+</div>

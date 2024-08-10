@@ -1,0 +1,76 @@
+@import "../../../styles.scss";
+@import "../home/header/header.component.scss";
+
+.new-message-wrapper {
+    @include dFlex(column, space-between, center);
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.new-message-top {
+    @include dFlex(column, flex-start, flex-start);
+    width: 100%;
+    height: 160px;
+    padding: 32px 45px 20px 45px;
+    gap: 20px;
+    box-shadow: 0px 3px 4px -2px rgba(0, 0, 0, 0.1);
+    position: relative;
+
+    h1 {
+        @include Nunito(700, 24px, 32.74px, $black);
+    }
+
+    .searchbar-container {
+        width: 100%;
+        position: relative;
+
+        input {
+            @include Nunito(400, 16px, 21.82px, $black);
+            width: 100%;
+            height: 55px;
+            border: 1px solid $light-purple-lines;
+            border-radius: 30px;
+            padding: 15px 20px 15px 20px;
+            gap: 10px;
+        }
+    }
+
+}
+
+.show-selected-users {
+    position: absolute;
+    top: 6px;
+    left: 44px;
+}
+
+.added-data {
+    position: absolute;
+    top: -6px;
+    left: -44px;
+    height: 55px;
+}
+
+.added-data-channel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 55px;
+    gap: unset;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 20px;
+}
+
+.search-results {
+    position: relative;
+    background-color: $white;
+    z-index: 5;
+}
+
+.remove-user {
+    @include dFlex(column, center, center);
+
+}

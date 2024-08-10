@@ -1,0 +1,155 @@
+<form class="input-container" [formGroup]="this.messageData" (ngSubmit)="this.onSubmit()">
+  <textarea [placeholder]="'Nachricht an ' + this.chatService.placeholderName" formControlName="message"></textarea>
+
+  <!--storage preview start-->
+  @if (this.storageData && this.isStorageDataImage(this.storageData)) {
+    <div class="preview-container">
+      <div (click)="this.closeAndDelete()" class="close-button pointer">X</div>
+      <div class="image-preview">
+        <img src="{{ this.storageData }}" alt="" />
+      </div>
+    </div>
+  } @else if (this.storageData && this.fileType === "application/pdf") {
+    <div class="preview-container">
+      <div (click)="this.closeAndDelete()" class="close-button pointer">X</div>
+      <div class="image-preview" style="background-color: black">
+        <img src="assets/img/icons/pdf_white.png" alt="pdf-icon" />
+      </div>
+    </div>
+  } @else if (this.fileExists) {
+    <span class="warning"
+      >Der Dateiname existiert bereits in der Datenbank, bitte suchen Sie sich einen anderen Namen aus.</span
+    >
+  }
+  <!--storage preview end-->
+  <div class="button-container">
+    <div class="left-section">
+      <div class="add-data-container icon-container pointer">
+        <label for="{{ this.labelId }}" class="button-white pointer">
+          <img class="pointer" src="assets/img/icons/add_grey.png" alt="icon-add" />
+          <input
+            type="file"
+            accept=".jpg, .jpeg, .png, .pdf"
+            id="{{ this.labelId }}"
+            (change)="this.uploadFile($event)"
+          />
+        </label>
+      </div>
+      <img class="" src="assets/img/icons/vertical_line_grey.png" alt="icon-vertical-line" />
+      <div class="icon-container pointer" (click)="this.toggleEmojiPicker()">
+        <img src="assets/img/icons/smiley_grey.png" alt="icon-smiley" />
+      </div>
+      @if (
+        (this.chatService.mainCollection === "channels" && this.getAvailableMembers().length > 0) ||
+        ((this.chatService.mainCollection === "newMessage" ||
+          this.chatService.mainCollection === "privateChats" ||
+          this.chatService.mainCollection === "privateNotes") &&
+          this.getAvailableUsers().length > 0)
+      ) {
+        <div class="icon-container pointer" (click)="this.toggleTagContainer()">
+          <img src="assets/img/icons/alternate_email_grey.png" alt="icon-email" />
+        </div>
+      }
+    </div>
+    <div class="right-section">
+      <button class="pointer" type="submit">
+        <img src="assets/img/icons/send_dark_blue.png" alt="icon-send" />
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- emoji Picker-->
+@if (this.showEmojiPicker) {
+  <div class="emoji-picker-container">
+    <div class="close-btn pointer" (click)="toggleEmojiPicker()">
+      <img src="assets/img/icons/close_black.png" alt="close-icon" />
+    </div>
+    <emoji-mart
+      [style]="{ width: '200px', height: '350px' }"
+      [perLine]="1"
+      [totalFrequentLines]="1"
+      [darkMode]="true"
+      [enableFrequentEmojiSort]="true"
+      [emojiTooltip]="false"
+      [hideObsolete]="true"
+      [showSingleCategory]="true"
+      [enableSearch]="false"
+      [showPreview]="false"
+      (emojiClick)="this.addEmoji($event)"
+    ></emoji-mart>
+  </div>
+}
+
+<!--tag a channel Member-->
+@if (this.showTagContainer && this.chatService.mainCollection == "channels" && this.getAvailableMembers().length > 0) {
+  <div class="tag-container">
+    <div class="member-selection-wrapper">
+      <div class="top-section">
+        <div class="pointer close-btn" (click)="this.toggleTagContainer()">
+          <img src="assets/img/icons/close_black.png" alt="close-icon" />
+        </div>
+      </div>
+      @for (channel of this.firebaseService.channelList; track channel; let channelIndex = $index) {
+        @for (user of this.channel.members; track user; let index = $index) {
+          @if (
+            user !== this.firebaseService.currentUserId &&
+            this.channel.chanId === this.chatService.docRef &&
+            !this.taggedUser.includes(user)
+          ) {
+            <div
+              class="member-container pointer"
+              (click)="tagChannelMember(this.firebaseService.getUserDisplayName(user), user, channelIndex)"
+            >
+              <div class="user-avatar">
+                <img [src]="this.firebaseService.getUserAvatar(user)" alt="User Avatar" />
+                <div
+                  class="user-status"
+                  [ngClass]="{
+                    online: this.firebaseService.getUserOnlineStatus(user),
+                    offline: !this.firebaseService.getUserOnlineStatus(user)
+                  }"
+                ></div>
+              </div>
+              <span>{{ this.firebaseService.getUserDisplayName(user) }}</span>
+            </div>
+          }
+        }
+      }
+    </div>
+  </div>
+}
+
+<!-- tag a user -->
+@if (
+  this.showTagContainer &&
+  (this.chatService.mainCollection === "newMessage" ||
+    this.chatService.mainCollection === "privateChats" ||
+    this.chatService.mainCollection === "privateNotes") &&
+  !this.isAllUsersTagged()
+) {
+  <div class="tag-container">
+    <div class="member-selection-wrapper">
+      <div class="top-section">
+        <div class="pointer close-btn" (click)="this.toggleTagContainer()">
+          <img src="assets/img/icons/close_black.png" alt="close-icon" />
+        </div>
+      </div>
+      @for (user of this.getAvailableUsers(); track user; let index = $index) {
+        <div class="member-container pointer" (click)="this.tagUser(user.name, user.userId)">
+          <div class="user-avatar">
+            <img [src]="user.photoURL" alt="User Avatar" />
+            <div
+              class="user-status"
+              [ngClass]="{
+                online: user.status,
+                offline: !user.status
+              }"
+            ></div>
+          </div>
+          <span>{{ user.name }}</span>
+        </div>
+      }
+    </div>
+  </div>
+}

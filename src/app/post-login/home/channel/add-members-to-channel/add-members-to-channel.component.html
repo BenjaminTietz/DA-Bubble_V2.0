@@ -1,0 +1,43 @@
+<div class="add-members-container">
+  <div class="headline">
+    <span>Leute Hinzufügen</span>
+    <div class="close-btn pointer" (click)="closeWindow()">
+      <img src="assets/img/icons/close_black.png" alt="" />
+    </div>
+  </div>
+  <div class="current-channel-name">
+    <img src="assets/img/icons/hashtag_chat_black.png" alt="" />
+    <span>{{ this.firebaseService.getChannelNameById(this.chatService.docRef) }}</span>
+  </div>
+
+  <div class="show-selected-users">
+    @for (user of this.searchService.selectedUser; track user; let index = $index) {
+      <div class="pointer added-data" (click)="this.searchService.removeSelectedUserFromArray(user)">
+        <img [src]="this.firebaseService.getUserAvatar(user)" alt="profile-pic" />
+        <span>{{ this.firebaseService.getUserDisplayName(user) }}</span>
+        <div class="remove-user">
+          <img src="assets/img/icons/close_black.png" alt="close-icon" />
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="search-container">
+    <input
+      [(ngModel)]="userName"
+      class="search-input"
+      type="text"
+      placeholder="Namen eingeben"
+      (input)="this.searchService.onUserSearch(this.userName, this.chatService.docRef)"
+      (focus)="this.searchService.onUserFocus(this.userName, this.chatService.docRef)"
+    />
+
+    @if (this.searchService.memberSearchActive) {
+      <div class="search-results">
+        <app-channel-member-selection></app-channel-member-selection>
+      </div>
+    }
+  </div>
+
+  <button [disabled]="!this.searchService.selectedUser.length" (click)="handleAddMember()">Hinzufügen</button>
+</div>

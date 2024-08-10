@@ -1,0 +1,14 @@
+<div class="channel-selection-wrapper">
+  <div class="top-section">
+    <div class="pointer close-btn" (click)="handleClickOnClose()">
+      <img src="assets/img/icons/close_black.png" alt="close-icon" />
+    </div>
+  </div>
+  @for (channel of this.searchService.channelSearchResults; track channel; let index = $index) {
+    @if (this.communicationService.newChanId !== channel) {
+      <div class="channel-container pointer" (click)="handleClickOnChannel(channel)">
+        <span>{{ this.firebaseService.getChannelNameById(channel) }}</span>
+      </div>
+    }
+  }
+</div>

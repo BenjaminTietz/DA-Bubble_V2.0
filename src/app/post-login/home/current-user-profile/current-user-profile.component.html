@@ -1,0 +1,203 @@
+@if (!isEditProfileVisible && !isEditAvatarVisible) {
+<div class="current-user-profile-wrapper">
+	<div class="profile-top-section">
+		<h1>Profil</h1>
+		<div class="pointer close-btn" (click)="toggleCurrentUserProfile(false)">
+			<img src="assets/img/icons/close_black.png" alt="close-icon" />
+		</div>
+	</div>
+	<div class="pointer profile-avatar pofile-avatar-hover" (click)="toggleEditAvatar()">
+		<img [src]="
+				this.firebaseService.getUserAvatar(
+					this.firebaseService.currentUserId
+				)
+			" alt="user-avatar" />
+		<span>Bearbeiten</span>
+	</div>
+	<div class="profile-bottom-section">
+		<div class="profile-name">
+			<h2>
+				{{
+				this.firebaseService.getUserDisplayName(
+				this.firebaseService.currentUserId
+				)
+				}}
+			</h2>
+			<p class="pointer" (click)="toggleEditProfile()">Bearbeiten</p>
+		</div>
+		<div class="profile-status">
+			<div class="online-status" [ngClass]="{
+					online: this.firebaseService.getUserOnlineStatus(
+						this.firebaseService.currentUserId
+					),
+					offline: !this.firebaseService.getUserOnlineStatus(
+						this.firebaseService.currentUserId
+					)
+				}"></div>
+			<p [ngClass]="{
+					'online-text': this.firebaseService.getUserOnlineStatus(
+						this.firebaseService.currentUserId
+					),
+					'offline-text': !this.firebaseService.getUserOnlineStatus(
+						this.firebaseService.currentUserId
+					)
+				}">
+				{{
+				this.firebaseService.getUserStatusText(
+				this.firebaseService.currentUserId
+				)
+				}}
+			</p>
+		</div>
+		<div class="profile-email-container">
+			<div class="email-container">
+				<img src="assets/img/icons/email_black.png" alt="email-icon" />
+				<p>E-Mail-Adresse</p>
+			</div>
+		</div>
+		<div class="pointer profile-email-adress">
+			<a [href]="
+					'mailto:' +
+					this.firebaseService.getUserEmail(
+						this.firebaseService.currentUserId
+					)
+				">
+				<p>
+					{{
+					this.firebaseService.getUserEmail(
+					this.firebaseService.currentUserId
+					)
+					}}
+				</p>
+			</a>
+		</div>
+	</div>
+</div>
+} @if (isEditProfileVisible) {
+<div class="current-user-profile-wrapper">
+	<div class="profile-top-section">
+		<h1>Dein Profil bearbeiten</h1>
+		<div class="pointer close-btn" (click)="toggleCurrentUserProfile(false); onCancel('editProfile')">
+			<img src="assets/img/icons/close_black.png" alt="close-icon" />
+		</div>
+	</div>
+	<div class="profile-avatar">
+		<img [src]="
+				this.firebaseService.getUserAvatar(
+					this.firebaseService.currentUserId
+				)
+			" alt="user-avatar" />
+	</div>
+	<form class="edit-user-form" [formGroup]="newUserData" (ngSubmit)="saveProfile()">
+		<div class="edit-input-container">
+			<div class="input-description">
+				<img src="assets/img/icons/account_circle_black.png" alt="user-icon" />
+				<p>Vollständiger Name</p>
+			</div>
+			<input formControlName="name" type="text" id="name" name="name" autocomplete="off" />
+			@if (hasError('name', 'required') || hasError('name', 'fullName')) {
+			<span class="error-msg-name">Vor & Nachnamen eingeben!</span>
+			}
+		</div>
+		<div class="edit-input-container" [ngStyle]="{
+				'margin-bottom': this.emailHasChanged(
+					newUserData.controls['email']
+				)
+					? '72px'
+					: '24px'
+			}">
+			<div class="input-description">
+				<img src="assets/img/icons/email_input_black.png" alt="user-icon" />
+				<p>E-Mail-Adresse</p>
+			</div>
+			<input formControlName="email" type="text" id="email" name="email" autocomplete="off" />
+			@if (hasError('email', 'required')) {
+			<span class="error-msg-email">Gib eine E-Mail Adresse ein!</span>
+			} @if (hasError('email', 'email')) {
+			<span class="error-msg-email">Adresse ungültig!</span>
+			} @if (this.emailHasChanged(newUserData.controls['email']) && !googleProviderExists && !(hasError('email', 'required') || hasError('email', 'email'))) {
+			<span class="info-msg-email">Sie werden abgemeldet und erhalten eine E-Mail mit einem
+				Bestätigungslink, um die neue E-Mail-Adresse zu
+				verifizieren.</span>
+			}
+		</div>
+		@if(!googleProviderExists){
+			@if((newUserData.controls['email'].touched || newUserData.controls['email'].dirty) && this.emailHasChanged(newUserData.controls['email'])){
+				<div class="edit-input-container">
+					<div class="input-description">
+						<img src="assets/img/icons/password_black.png" alt="password-icon" />
+						<p>Passwort</p>
+					</div>
+					<input formControlName="password" type="text" id="password" name="password" placeholder="Bestätige dein Passwort" autocomplete="off" />
+					@if (hasError('password', 'required') &&
+						(newUserData.controls['password'].touched ||
+						newUserData.controls['password'].dirty)) {
+						<span class="error-msg-email">Gib dein Passwort ein!</span>
+					} @if (hasError('password', 'minlength')) {
+						<span class="error-msg-email">Passwort zu kurz!</span>
+					} @if (this.emailHasChanged(newUserData.controls['email']) &&
+						!(newUserData.controls['password'].touched ||
+						newUserData.controls['password'].dirty)) {
+						<span class="error-msg-email">{{ this.emailHasChanged(newUserData.controls["email"]) }}</span>
+					}
+				</div>
+				}
+		}
+
+		<div class="btn-container">
+			<button type="button" class="pointer cancel-btn" (click)="onCancel('editProfile')">
+				Abbrechen
+			</button>
+			<button type="submit" class="pointer save-btn" [disabled]="newUserData.invalid || userIsGuest">
+				Speichern
+			</button>
+		</div>
+	</form>
+	@if (this.userIsGuest) {
+	<span class="error-msg-guest">Als Gast nicht verfügbar</span>
+	}
+</div>
+} @if (isEditAvatarVisible && !isEditProfileVisible) {
+<div class="current-user-profile-wrapper">
+	<div class="profile-top-section">
+		<h1>Avatar wechseln</h1>
+		<div class="pointer close-btn" (click)="isEditAvatarVisible=false">
+			<img src="assets/img/icons/close_black.png" alt="close-icon" />
+		</div>
+	</div>
+	<div class="profile-avatar">
+		@if (!newAvatarChosen) {
+		<img [src]="
+				this.firebaseService.getUserAvatar(
+					this.firebaseService.currentUserId
+				)
+			" alt="user-avatar" />
+		} @else {
+		<img [src]="newAvatarPath" alt="user-avatar" />
+		}
+	</div>
+	<div class="avatar-container">
+		<span>Wähle deinen neuen Avatar</span>
+		<div class="avatar-selection">
+			@for (avatar of avatarList; track avatar; let index = $index) {
+			<img [src]="avatar.path" alt="avatar" class="pointer" (click)="setNewAvatar(avatar.id)" />
+			}
+		</div>
+	</div>
+	<div class="upload-image">
+		<span>eigenes Bild verwenden</span>
+		<div class="button-wrap">
+			<input type="file" id="fileUpload" accept=".jpg, .jpeg, .png" (change)="uploadFile($event)" />
+			<label for="fileUpload" class="button-white">Datei hochladen</label>
+		</div>
+	</div>
+	<div class="btn-container">
+		<button class="pointer cancel-btn" (click)="onCancel('editAvatar')">
+			Abbrechen
+		</button>
+		<button class="pointer save-btn" (click)="updateAvatar()" [disabled]="!newAvatarChosen">
+			Speichern
+		</button>
+	</div>
+</div>
+}
