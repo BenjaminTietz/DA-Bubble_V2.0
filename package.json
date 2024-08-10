@@ -6,7 +6,7 @@
     "start": "ng serve -o",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-	"format": "prettier --write ./**/*.ts",
+    "format": "prettier --write ./**/*.ts",
     "test": "ng test"
   },
   "private": true,
@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
+    "firebase": "^10.12.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
