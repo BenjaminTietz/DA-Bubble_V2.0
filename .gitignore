@@ -50,3 +50,4 @@ Thumbs.db
 # Custom
 *.todo
 *.drawio
+src/app/app.config.ts
