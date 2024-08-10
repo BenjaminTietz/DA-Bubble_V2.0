@@ -176,7 +176,7 @@ export class AuthService {
    * @returns {Observable<void>} An observable that resolves when the login operation is complete.
    */
   loginAsGuest(): Observable<void> {
-    const promise = signInWithEmailAndPassword(this.firebaseAuth, 'MaxMustermann@gast.com', '123456')
+    const promise = signInWithEmailAndPassword(this.firebaseAuth, 'maxmustermann@muellmail.com', '123456')
       .then(() => {})
       .catch((error) => {
         console.log(error);
