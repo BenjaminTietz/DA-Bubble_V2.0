@@ -334,8 +334,8 @@ export class InitUserService {
    */
   setGuestPrivateChat(): Object {
     return {
-      chatCreator: 'RsgU38XPWoSUezBf8JT5HOJVdja2',
-      chatReciver: 'tacaNwHF8SPuTfJFbpCz2J2aIPH2',
+      chatCreator: 'gAUySY6QUrStjCeILJyQ57mVOi52',
+      chatReciver: this.GuestUserID,
       privatChatId: 'jCOseDfos4U2G9XkG5S0',
     };
   }
@@ -355,7 +355,7 @@ export class InitUserService {
       lastAnswer: '',
       lastEdit: '',
       messageId: '9hgkOYlnJN5GXPI3CBoF',
-      messageSendBy: 'tacaNwHF8SPuTfJFbpCz2J2aIPH2',
+      messageSendBy: 'gAUySY6QUrStjCeILJyQ57mVOi52',
       reactions: [],
       storageData: '',
       taggedUser: [],
