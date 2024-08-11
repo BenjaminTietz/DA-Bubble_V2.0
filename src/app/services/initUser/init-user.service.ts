@@ -37,6 +37,21 @@ export class InitUserService {
     'Dezember',
   ];
 
+  // User ID of actual Guest User
+  GuestUserID = '2mpXtCR7UbZbNxDzcMniUIqLNVt2';
+
+  // Demo User IDs
+  DemoUser = [
+    'GvMTa8fbPnSDP3TTdDeA2ZdDshC2',
+    'NjCKLcFp7NYZMZT9qcRggrp996a2',
+    'kyDFwOmOfwXMJkLvLNz7EFTBJo52',
+    'lhBCfqzw7Ggo65meRKfS6JRDehZ2',
+    'NshI4OaZsdSdN2sS6MBK0MTBQjE3',
+    'gAUySY6QUrStjCeILJyQ57mVOi52',
+    't7u4PmJK4MVZnP25l7yORCeyA8r2',
+    'w7tTh3HaWaYnJyMpTexi35PUtij1',
+  ];
+
   /**
    * Sets initial database entries for the logged-in user.
    * @returns {void}
@@ -76,7 +91,7 @@ export class InitUserService {
   setPrivateNoteObject(): Object {
     const user = this.authService.firebaseAuth.currentUser!;
     return {
-      privatChatId: user.uid,
+      privateNoteId: user.uid,
       privateNoteCreator: user.uid,
     };
   }
@@ -87,7 +102,7 @@ export class InitUserService {
    * @returns {void}
    */
   setGuestExampleData(): void {
-    const guestId = 'RsgU38XPWoSUezBf8JT5HOJVdja2';
+    const guestId = this.GuestUserID;
     this.clearGuestChannels(guestId).then(() => {
       this.clearGuestPrivateChats(guestId).then(() => {
         this.clearGuestPrivateNotes(guestId).finally(() => {
