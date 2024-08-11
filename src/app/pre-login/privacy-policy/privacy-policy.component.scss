@@ -12,13 +12,16 @@ section {
 header {
   padding: 55px 70px;
   @include dFlex($jc: space-between, $ai: center);
+
   div:nth-child(1) {
     @include dFlex($ai: center);
+
     img {
       width: 70px;
       height: 70px;
       margin-right: 16px;
     }
+
     h1 {
       color: $black;
       font-size: 1.25rem;
@@ -29,7 +32,7 @@ header {
 main {
   position: relative;
   max-width: 1920px;
-  height: 80dvh;
+  height: calc(80dvh - 36px);
   margin: 0 auto;
   padding: 70px 70px;
   background-color: $white;
@@ -45,9 +48,11 @@ main {
   height: 40px;
   border-radius: 50%;
   @include dFlex(row, center, center);
+
   &:hover {
     @include btnHover($bg-color);
   }
+
   &:active {
     @include btnActive($bg-color);
   }
@@ -67,6 +72,7 @@ a {
   @include Nunito(700, 18px, 24.55px, $purple-3);
   text-decoration: none;
   word-wrap: break-word;
+
   &:hover {
     color: $purple-1;
   }
@@ -74,6 +80,7 @@ a {
 
 ul {
   padding-left: 20px;
+
   li {
     margin: 8px 0;
   }
@@ -88,9 +95,11 @@ ul {
   main {
     padding: 70px 40px;
   }
+
   h1 {
     font-size: 2rem;
   }
+
   h2 {
     font-size: 1.5rem;
   }
@@ -100,6 +109,7 @@ ul {
   main {
     padding: 70px 20px;
   }
+
   h1 {
     font-size: 1.5rem;
   }
