@@ -46,11 +46,12 @@ export class InitUserService {
     'GvMTa8fbPnSDP3TTdDeA2ZdDshC2',
     'NjCKLcFp7NYZMZT9qcRggrp996a2',
     'kyDFwOmOfwXMJkLvLNz7EFTBJo52',
-    'lhBCfqzw7Ggo65meRKfS6JRDehZ2',
+    'pyu6zruaHVYjjAOTP9OiICfIhii1',
+
     'NshI4OaZsdSdN2sS6MBK0MTBQjE3',
     'gAUySY6QUrStjCeILJyQ57mVOi52',
     't7u4PmJK4MVZnP25l7yORCeyA8r2',
-    'w7tTh3HaWaYnJyMpTexi35PUtij1',
+    'c1o3mOtxvwS81gi4BwXLAJAXqPa2',
   ];
 
   privateChatMessageText = [
