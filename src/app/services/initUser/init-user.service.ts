@@ -53,7 +53,7 @@ export class InitUserService {
     't7u4PmJK4MVZnP25l7yORCeyA8r2',
     'c1o3mOtxvwS81gi4BwXLAJAXqPa2',
   ];
-
+  // Array of random messages for the private chat
   privateChatMessageText = [
     'Hallo Max, wie geht es dir heute?',
     'Hallo, ich habe eine Frage.',
@@ -79,7 +79,7 @@ export class InitUserService {
   }
 
   /**
-   * Creates a user object for Firestore.
+   * Creates a user object for Firestore. (for every user registering with email and password & sets up example data)
    * @param {string} [username] - Optional username for the user.
    * @returns {Object} The user object.
    */
@@ -87,9 +87,11 @@ export class InitUserService {
     const user = this.authService.firebaseAuth.currentUser!;
     return {
       userId: user.uid,
-      name: username ? username : user.displayName ? user.displayName : 'Max Mustermann',
+      name: username ? username : user.displayName ? user.displayName : 'Maxi Müller',
       status: true,
-      photoURL: user.photoURL ? user.photoURL : 'assets/img/character-images/character_1.png',
+      photoURL: user.photoURL
+        ? user.photoURL
+        : 'https://firebasestorage.googleapis.com/v0/b/da-bubble-v2.appspot.com/o/chatData%2FRaT3kPNmqnAJld2JSuXd%2Fguest_user.png?alt=media&token=252da85a-6bee-4f3b-991f-10e4461008cf',
       channels: ['yh1LXpvXcOWY2hZOEfZ2'],
       email: user.email ? user.email : 'MaxMustermann@gast.com',
       privateNoteRef: user.uid,
@@ -448,10 +450,10 @@ export class InitUserService {
           nativeEmoji: '👍',
           reactionId: '1F44D',
           user: [
-            'lhBCfqzw7Ggo65meRKfS6JRDehZ2',
+            'kyDFwOmOfwXMJkLvLNz7EFTBJo52',
+            'pyu6zruaHVYjjAOTP9OiICfIhii1',
             'NshI4OaZsdSdN2sS6MBK0MTBQjE3',
             'gAUySY6QUrStjCeILJyQ57mVOi52',
-            't7u4PmJK4MVZnP25l7yORCeyA8r2',
           ],
         },
       ],
@@ -490,7 +492,15 @@ export class InitUserService {
       date: new Date().toLocaleDateString(),
       time: Date.now().toString(),
       messageSendBy: 'GvMTa8fbPnSDP3TTdDeA2ZdDshC2',
-      reactions: [],
+      reactions: [
+        {
+          amount: 1,
+          messageId: 'wcn0pm1gYnyxdnGakVQo',
+          nativeEmoji: '👍',
+          reactionId: '1F44D',
+          user: ['NshI4OaZsdSdN2sS6MBK0MTBQjE3'],
+        },
+      ],
       editCount: 0,
       lastEdit: '',
       storageData: '',
@@ -522,12 +532,21 @@ export class InitUserService {
       messageId: ids.initialThreadMessageId,
       date: new Date().toLocaleDateString(),
       time: Date.now().toString(),
-      messageSendBy: ids.userId,
-      reactions: [],
+      messageSendBy: 'NshI4OaZsdSdN2sS6MBK0MTBQjE3',
+      reactions: [
+        {
+          amount: 1,
+          messageId: 'wcn0pm1gYnyxdnGakVQo',
+          nativeEmoji: '👍',
+          reactionId: '1F44D',
+          user: ['GvMTa8fbPnSDP3TTdDeA2ZdDshC2'],
+        },
+      ],
       editCount: 0,
       lastEdit: '',
-      storageData: '',
-      taggedUser: [],
+      storageData:
+        'https://firebasestorage.googleapis.com/v0/b/da-bubble-v2.appspot.com/o/chatData%2F8mLbSv4WS6LtbBmxjiaU%2FAngular-18.png?alt=media&token=6f66fa1f-4d99-4e35-89f9-b10af976b4eb',
+      taggedUser: ['GvMTa8fbPnSDP3TTdDeA2ZdDshC2'],
     };
   }
 
