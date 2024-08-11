@@ -20,7 +20,6 @@
             "outputPath": "dist/da-bubble",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "baseHref": "/angular-projects/da-bubble/",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -42,12 +41,14 @@
                   "maximumError": "200kb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "baseHref": "https://dabubble.benjamin-tietz.com/"
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "baseHref": "/"
             }
           },
           "defaultConfiguration": "production"
