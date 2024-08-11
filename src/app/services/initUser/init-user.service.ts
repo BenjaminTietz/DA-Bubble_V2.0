@@ -77,7 +77,7 @@ export class InitUserService {
       name: username ? username : user.displayName ? user.displayName : 'Max Mustermann',
       status: true,
       photoURL: user.photoURL ? user.photoURL : 'assets/img/character-images/character_1.png',
-      channels: [],
+      channels: ['yh1LXpvXcOWY2hZOEfZ2'],
       email: user.email ? user.email : 'MaxMustermann@gast.com',
       privateNoteRef: user.uid,
     };
@@ -284,7 +284,7 @@ export class InitUserService {
    */
   addGuestChannel(): Promise<void> {
     const ids = {
-      userId: 'RsgU38XPWoSUezBf8JT5HOJVdja2',
+      userId: this.GuestUserID,
       channelId: 'yh1LXpvXcOWY2hZOEfZ2',
       messageId: 'wcn0pm1gYnyxdnGakVQo',
       initialThreadMessageId: 'uZMq0kPFjgNhfsrqj2wr',
@@ -372,11 +372,13 @@ export class InitUserService {
    * @returns {Object} The channel object.
    */
   setGuestChannel(userId: string): Object {
+    const members = [userId, ...this.DemoUser];
+
     return {
       chanId: '',
       name: 'Gast-Channel',
       description: 'Dies ist ein Beispiel-Channel für den Gast-Benutzer',
-      members: [userId, 'tacaNwHF8SPuTfJFbpCz2J2aIPH2'],
+      members: members,
       createdAt: this.convertDate(),
       createdBy: userId,
     };
@@ -401,19 +403,24 @@ export class InitUserService {
     threadAnswerId: string;
   }): Object {
     return {
-      messageId: '',
+      messageId: 'wcn0pm1gYnyxdnGakVQo',
       text: 'Welche Version von Angular ist die aktuelle?',
       chatId: ids.channelId,
       date: this.convertDate(),
       time: Date.now().toString(),
-      messageSendBy: 'tacaNwHF8SPuTfJFbpCz2J2aIPH2',
+      messageSendBy: 'GvMTa8fbPnSDP3TTdDeA2ZdDshC2',
       reactions: [
         {
-          amount: 1,
+          amount: 4,
           messageId: 'wcn0pm1gYnyxdnGakVQo',
           nativeEmoji: '👍',
           reactionId: '1F44D',
-          user: ['RsgU38XPWoSUezBf8JT5HOJVdja2'],
+          user: [
+            'lhBCfqzw7Ggo65meRKfS6JRDehZ2',
+            'NshI4OaZsdSdN2sS6MBK0MTBQjE3',
+            'gAUySY6QUrStjCeILJyQ57mVOi52',
+            't7u4PmJK4MVZnP25l7yORCeyA8r2',
+          ],
         },
       ],
       threadId: '',
@@ -450,7 +457,7 @@ export class InitUserService {
       messageId: ids.initialThreadMessageId,
       date: new Date().toLocaleDateString(),
       time: Date.now().toString(),
-      messageSendBy: 'tacaNwHF8SPuTfJFbpCz2J2aIPH2',
+      messageSendBy: 'GvMTa8fbPnSDP3TTdDeA2ZdDshC2',
       reactions: [],
       editCount: 0,
       lastEdit: '',
@@ -478,7 +485,7 @@ export class InitUserService {
     threadAnswerId: string;
   }): Object {
     return {
-      messageAnswerId: ids.threadAnswerId,
+      messageAnswerId: 'ids.threadAnswerId',
       text: 'Es scheint die Version 18.1.1 zu sein.',
       messageId: ids.initialThreadMessageId,
       date: new Date().toLocaleDateString(),
