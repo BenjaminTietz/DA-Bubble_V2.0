@@ -12,6 +12,7 @@ import {
   setDoc,
   updateDoc,
   where,
+  writeBatch,
 } from '@angular/fire/firestore';
 import { AuthService } from '../authentication/auth.service';
 
@@ -50,6 +51,17 @@ export class InitUserService {
     'gAUySY6QUrStjCeILJyQ57mVOi52',
     't7u4PmJK4MVZnP25l7yORCeyA8r2',
     'w7tTh3HaWaYnJyMpTexi35PUtij1',
+  ];
+
+  privateChatMessageText = [
+    'Hallo Max, wie geht es dir heute?',
+    'Hallo, ich habe eine Frage.',
+    'Hast du meine Nachricht gelesen?',
+    'Ich habe eine Antwort auf deine Frage.',
+    'Hey Max, wie war dein Wochenende?',
+    'Max, hast du das Protokoll des letzten Meetings erhalten?',
+    'Morgen um 16:00 Uhr ist unser Meeting.',
+    'Kannst du mir bitte helfen?',
   ];
 
   /**
@@ -260,21 +272,34 @@ export class InitUserService {
   }
 
   /**
-   * Adds an example private chat for the guest user.
+   * Adds private chats between each demo user and the guest user, with individual messages.
    *
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @returns {Promise<void>} A promise that resolves when all operations are complete.
    */
-  addGuestExamplePrivateChat(): Promise<void> {
-    const examplePrivateChatId = 'jCOseDfos4U2G9XkG5S0';
-    const promise = setDoc(doc(this.firestore, 'privateChats', examplePrivateChatId), this.setGuestPrivateChat()).then(
-      () => {
-        setDoc(
-          doc(this.firestore, 'privateChats', examplePrivateChatId, 'messages', '9hgkOYlnJN5GXPI3CBoF'),
-          this.setGuestPrivateMessage(examplePrivateChatId),
-        ).then(() => {});
-      },
-    );
-    return promise;
+  async addGuestExamplePrivateChat(): Promise<void> {
+    const guestUserId = this.GuestUserID;
+    const demoUserIds = this.DemoUser;
+
+    const batch = writeBatch(this.firestore);
+
+    demoUserIds.forEach((demoUserId) => {
+      const chatId = this.generateUniqueId(); // Generate a unique chat ID
+
+      batch.set(doc(this.firestore, 'privateChats', chatId), this.setGuestPrivateChat(guestUserId, demoUserId));
+
+      batch.set(
+        doc(this.firestore, 'privateChats', chatId, 'messages', this.generateUniqueId()), // Generate a unique message ID
+        this.setGuestPrivateMessage(chatId, demoUserId, guestUserId),
+      );
+    });
+
+    try {
+      // Commit the batch
+      await batch.commit();
+      console.log('All private chats and messages successfully created.');
+    } catch (error) {
+      console.error('Error creating private chats and messages:', error);
+    }
   }
 
   /**
@@ -328,25 +353,31 @@ export class InitUserService {
   }
 
   /**
-   * Creates a private chat object for the guest user.
+   * Creates a private chat object for the guest user and a demo user.
    *
+   * @param {string} guestUserId - The ID of the guest user.
+   * @param {string} demoUserId - The ID of the demo user.
    * @returns {Object} The private chat object.
    */
-  setGuestPrivateChat(): Object {
+  setGuestPrivateChat(guestUserId: string, demoUserId: string): Object {
     return {
-      chatCreator: 'gAUySY6QUrStjCeILJyQ57mVOi52',
-      chatReciver: this.GuestUserID,
-      privatChatId: 'jCOseDfos4U2G9XkG5S0',
+      privatChatId: this.generateUniqueId(),
+      chatCreator: demoUserId,
+      chatReciver: guestUserId,
     };
   }
 
   /**
-   * Creates a private message object for the guest user.
+   * Creates a private message object for the guest user and a demo user.
    *
    * @param {string} chatId - The ID of the private chat.
+   * @param {string} senderId - The ID of the user sending the message.
+   * @param {string} recipientId - The ID of the user receiving the message.
    * @returns {Object} The private message object.
    */
-  setGuestPrivateMessage(chatId: string): Object {
+  setGuestPrivateMessage(chatId: string, senderId: string, recipientId: string): Object {
+    const randomMessage = this.getRandomMessage();
+
     return {
       answerCount: 0,
       chatId: chatId,
@@ -354,12 +385,12 @@ export class InitUserService {
       editCount: 0,
       lastAnswer: '',
       lastEdit: '',
-      messageId: '9hgkOYlnJN5GXPI3CBoF',
-      messageSendBy: 'gAUySY6QUrStjCeILJyQ57mVOi52',
+      messageId: this.generateUniqueId(),
+      messageSendBy: senderId,
       reactions: [],
       storageData: '',
-      taggedUser: [],
-      text: 'Hallo, wie geht es dir?',
+      taggedUser: [recipientId],
+      text: randomMessage,
       threadId: '',
       time: Date.now().toString(),
     };
@@ -506,5 +537,22 @@ export class InitUserService {
    */
   convertDate(): string {
     return `${this.weekday[new Date().getDay()]}, ${new Date().getDate()}. ${this.months[new Date().getMonth()]}`;
+  }
+
+  /**
+   * Generates a unique ID.
+   * @returns {string} A unique ID.
+   */
+  generateUniqueId(): string {
+    return Math.random().toString(36).substr(2, 9); // Example for unique ID generation
+  }
+
+  /**
+   * Returns a random message from the privateChatMessageText array.
+   * @returns {string} A random message text.
+   */
+  getRandomMessage(): string {
+    const randomIndex = Math.floor(Math.random() * this.privateChatMessageText.length);
+    return this.privateChatMessageText[randomIndex];
   }
 }
