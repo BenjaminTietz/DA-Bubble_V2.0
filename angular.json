@@ -20,7 +20,7 @@
             "outputPath": "dist/da-bubble",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "baseHref": "/angular-projects/da-bubble/",
+            "baseHref": "",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
