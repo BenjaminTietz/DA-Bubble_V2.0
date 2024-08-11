@@ -299,9 +299,8 @@ export class InitUserService {
     try {
       // Commit the batch
       await batch.commit();
-      console.log('All private chats and messages successfully created.');
     } catch (error) {
-      console.error('Error creating private chats and messages:', error);
+      console.warn('Error creating private chats and messages:', error);
     }
   }
 
