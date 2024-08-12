@@ -1,10 +1,10 @@
 <div class="private-msg-wrapper">
-  @for (privateNote of firebaseService.privateNoteList; track privateNote.privatNoteId; let index = $index) {
+  @for (privateNote of firebaseService.privateNoteList; track privateNote.privateNoteId; let index = $index) {
     <div
       class="private-msg-container pointer"
       (click)="handleNoteMessageClick(privateNote.privateNoteCreator)"
-      [ngClass]="{ active: this.chatService.docRef === privateNote.privatNoteId }"
-      [routerLink]="['/home/privateNotes', privateNote.privatNoteId]"
+      [ngClass]="{ active: this.chatService.docRef === privateNote.privateNoteId }"
+      [routerLink]="['/home/privateNotes', privateNote.privateNoteId]"
     >
       <div class="user-avatar">
         <img

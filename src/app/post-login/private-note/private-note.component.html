@@ -6,7 +6,7 @@
   }"
 >
   <div class="top-section">
-    @for (privateNote of firebaseService.privateNoteList; track privateNote.privatNoteId; let index = $index) {
+    @for (privateNote of firebaseService.privateNoteList; track privateNote.privateNoteId; let index = $index) {
       <div class="user-content pointer" (click)="this.communicationService.handleClickCurrentUser(true)">
         <img [src]="this.firebaseService.getUserAvatar(privateNote.privateNoteCreator)" alt="User Avatar" />
         <div
@@ -22,8 +22,8 @@
   </div>
 
   <div class="chat-history">
-    @for (privateNote of firebaseService.privateNoteList; track privateNote.privatNoteId; let index = $index) {
-      @if (privateNote.privatNoteId === this.chatService.docRef) {
+    @for (privateNote of firebaseService.privateNoteList; track privateNote.privateNoteId; let index = $index) {
+      @if (privateNote.privateNoteId === this.chatService.docRef) {
         @if (chatService.msgList.length === 0) {
           <div class="empty-chat-overlay">
             <div class="top-section">

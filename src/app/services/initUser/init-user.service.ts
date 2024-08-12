@@ -109,12 +109,12 @@ export class InitUserService {
    *
    * @returns {Object} An object containing the private chat ID and private note creator ID.
    */
-  setPrivateNoteObject(): Object {
+  setPrivateNoteObject(): PrivateNote {
     const user = this.authService.firebaseAuth.currentUser!;
-    return new PrivateNote({
+    return {
       privateNoteId: user.uid,
       privateNoteCreator: user.uid,
-    });
+    };
   }
 
   /**

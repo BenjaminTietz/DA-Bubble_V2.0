@@ -453,7 +453,7 @@ export class FirebaseService {
    */
   setPrivateNote(obj: any, id: string): PrivateNote {
     return {
-      privatNoteId: id || '',
+      privateNoteId: id || '',
       privateNoteCreator: obj.privateNoteCreator || '',
     };
   }

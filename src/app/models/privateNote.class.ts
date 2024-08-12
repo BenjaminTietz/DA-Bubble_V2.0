@@ -1,9 +1,9 @@
 export class PrivateNote {
-  privatNoteId: string;
+  privateNoteId: string;
   privateNoteCreator: string;
 
   constructor(obj?: any) {
-    this.privatNoteId = obj ? obj.id : '';
+    this.privateNoteId = obj ? obj.id : '';
     this.privateNoteCreator = obj ? obj.privateNote : '';
   }
 }
