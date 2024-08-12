@@ -20,6 +20,7 @@ import { User } from '../../models/user.class';
 import { PrivateNote } from '../../models/privateNote.class';
 import { Message } from '../../models/message.class';
 import { Channel } from '../../models/channel.class';
+import { PrivateChat } from '../../models/privateChat.class';
 
 @Injectable({
   providedIn: 'root',
@@ -111,10 +112,11 @@ export class InitUserService {
    */
   setPrivateNoteObject(): PrivateNote {
     const user = this.authService.firebaseAuth.currentUser!;
-    return {
+    const privateNoteData = {
       privateNoteId: user.uid,
       privateNoteCreator: user.uid,
     };
+    return privateNoteData;
   }
 
   /**
@@ -367,12 +369,13 @@ export class InitUserService {
    * @param {string} demoUserId - The ID of the demo user.
    * @returns {Object} The private chat object.
    */
-  setGuestPrivateChat(guestUserId: string, demoUserId: string): Object {
-    return new PrivateNote({
+  setGuestPrivateChat(guestUserId: string, demoUserId: string): PrivateChat {
+    const privateChatData = {
       privatChatId: this.generateUniqueId(),
       chatCreator: demoUserId,
       chatReciver: guestUserId,
-    });
+    };
+    return privateChatData;
   }
 
   /**
@@ -385,8 +388,7 @@ export class InitUserService {
    */
   setGuestPrivateMessage(chatId: string, senderId: string, recipientId: string): Object {
     const randomMessage = this.getRandomMessage();
-
-    return new Message({
+    const newMessage = {
       answerCount: 0,
       chatId: chatId,
       date: this.convertDate(),
@@ -401,7 +403,8 @@ export class InitUserService {
       text: randomMessage,
       threadId: '',
       time: Date.now().toString(),
-    });
+    };
+    return newMessage;
   }
 
   /**
@@ -412,15 +415,15 @@ export class InitUserService {
    */
   setGuestChannel(userId: string): Object {
     const members = [userId, ...this.DemoUser];
-
-    return new Channel({
+    const channelData = {
       chanId: '',
       name: 'Gast-Channel',
       description: 'Dies ist ein Beispiel-Channel für den Gast-Benutzer',
       members: members,
       createdAt: this.convertDate(),
       createdBy: userId,
-    });
+    };
+    return channelData;
   }
 
   /**
@@ -440,8 +443,8 @@ export class InitUserService {
     messageId: string;
     initialThreadMessageId: string;
     threadAnswerId: string;
-  }): Object {
-    return new Message({
+  }): Message {
+    const newMessageData = {
       messageId: 'wcn0pm1gYnyxdnGakVQo',
       text: 'Welche Version von Angular ist die aktuelle?',
       chatId: ids.channelId,
@@ -469,7 +472,8 @@ export class InitUserService {
       lastEdit: '',
       taggedUser: [],
       storageData: '',
-    });
+    };
+    return newMessageData;
   }
 
   /**
@@ -489,8 +493,8 @@ export class InitUserService {
     messageId: string;
     initialThreadMessageId: string;
     threadAnswerId: string;
-  }): Object {
-    return new MessageAnswer({
+  }): MessageAnswer {
+    const messageAnswerData = {
       messageAnswerId: '',
       text: 'Welche Version von Angular ist die aktuelle?',
       messageId: ids.initialThreadMessageId,
@@ -510,7 +514,8 @@ export class InitUserService {
       lastEdit: '',
       storageData: '',
       taggedUser: [],
-    });
+    };
+    return messageAnswerData;
   }
 
   /**
@@ -530,8 +535,8 @@ export class InitUserService {
     messageId: string;
     initialThreadMessageId: string;
     threadAnswerId: string;
-  }): Object {
-    return new MessageAnswer({
+  }): MessageAnswer {
+    const messageAnswerData = {
       messageAnswerId: 'ids.threadAnswerId',
       text: 'Es scheint die Version 18.1.1 zu sein.',
       messageId: ids.initialThreadMessageId,
@@ -552,7 +557,8 @@ export class InitUserService {
       storageData:
         'https://firebasestorage.googleapis.com/v0/b/da-bubble-v2.appspot.com/o/chatData%2F8mLbSv4WS6LtbBmxjiaU%2FAngular-18.png?alt=media&token=6f66fa1f-4d99-4e35-89f9-b10af976b4eb',
       taggedUser: ['GvMTa8fbPnSDP3TTdDeA2ZdDshC2'],
-    });
+    };
+    return messageAnswerData;
   }
 
   /**
