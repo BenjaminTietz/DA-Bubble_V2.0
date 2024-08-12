@@ -1,3 +1,4 @@
+import { MessageAnswer } from './../../models/messageAnswer.class';
 import { inject, Injectable } from '@angular/core';
 import {
   collection,
@@ -15,6 +16,10 @@ import {
   writeBatch,
 } from '@angular/fire/firestore';
 import { AuthService } from '../authentication/auth.service';
+import { User } from '../../models/user.class';
+import { PrivateNote } from '../../models/privateNote.class';
+import { Message } from '../../models/message.class';
+import { Channel } from '../../models/channel.class';
 
 @Injectable({
   providedIn: 'root',
@@ -83,9 +88,9 @@ export class InitUserService {
    * @param {string} [username] - Optional username for the user.
    * @returns {Object} The user object.
    */
-  setUserObject(username?: string): Object {
+  setUserObject(username?: string): User {
     const user = this.authService.firebaseAuth.currentUser!;
-    return {
+    let userData = new User({
       userId: user.uid,
       name: username ? username : user.displayName ? user.displayName : 'Maxi Müller',
       status: true,
@@ -95,7 +100,8 @@ export class InitUserService {
       channels: ['yh1LXpvXcOWY2hZOEfZ2'],
       email: user.email ? user.email : 'MaxMustermann@gast.com',
       privateNoteRef: user.uid,
-    };
+    });
+    return userData;
   }
 
   /**
@@ -105,10 +111,10 @@ export class InitUserService {
    */
   setPrivateNoteObject(): Object {
     const user = this.authService.firebaseAuth.currentUser!;
-    return {
+    return new PrivateNote({
       privateNoteId: user.uid,
       privateNoteCreator: user.uid,
-    };
+    });
   }
 
   /**
@@ -362,11 +368,11 @@ export class InitUserService {
    * @returns {Object} The private chat object.
    */
   setGuestPrivateChat(guestUserId: string, demoUserId: string): Object {
-    return {
+    return new PrivateNote({
       privatChatId: this.generateUniqueId(),
       chatCreator: demoUserId,
       chatReciver: guestUserId,
-    };
+    });
   }
 
   /**
@@ -380,7 +386,7 @@ export class InitUserService {
   setGuestPrivateMessage(chatId: string, senderId: string, recipientId: string): Object {
     const randomMessage = this.getRandomMessage();
 
-    return {
+    return new Message({
       answerCount: 0,
       chatId: chatId,
       date: this.convertDate(),
@@ -395,7 +401,7 @@ export class InitUserService {
       text: randomMessage,
       threadId: '',
       time: Date.now().toString(),
-    };
+    });
   }
 
   /**
@@ -407,14 +413,14 @@ export class InitUserService {
   setGuestChannel(userId: string): Object {
     const members = [userId, ...this.DemoUser];
 
-    return {
+    return new Channel({
       chanId: '',
       name: 'Gast-Channel',
       description: 'Dies ist ein Beispiel-Channel für den Gast-Benutzer',
       members: members,
       createdAt: this.convertDate(),
       createdBy: userId,
-    };
+    });
   }
 
   /**
@@ -435,7 +441,7 @@ export class InitUserService {
     initialThreadMessageId: string;
     threadAnswerId: string;
   }): Object {
-    return {
+    return new Message({
       messageId: 'wcn0pm1gYnyxdnGakVQo',
       text: 'Welche Version von Angular ist die aktuelle?',
       chatId: ids.channelId,
@@ -463,7 +469,7 @@ export class InitUserService {
       lastEdit: '',
       taggedUser: [],
       storageData: '',
-    };
+    });
   }
 
   /**
@@ -484,7 +490,7 @@ export class InitUserService {
     initialThreadMessageId: string;
     threadAnswerId: string;
   }): Object {
-    return {
+    return new MessageAnswer({
       messageAnswerId: '',
       text: 'Welche Version von Angular ist die aktuelle?',
       messageId: ids.initialThreadMessageId,
@@ -504,7 +510,7 @@ export class InitUserService {
       lastEdit: '',
       storageData: '',
       taggedUser: [],
-    };
+    });
   }
 
   /**
@@ -525,7 +531,7 @@ export class InitUserService {
     initialThreadMessageId: string;
     threadAnswerId: string;
   }): Object {
-    return {
+    return new MessageAnswer({
       messageAnswerId: 'ids.threadAnswerId',
       text: 'Es scheint die Version 18.1.1 zu sein.',
       messageId: ids.initialThreadMessageId,
@@ -546,7 +552,7 @@ export class InitUserService {
       storageData:
         'https://firebasestorage.googleapis.com/v0/b/da-bubble-v2.appspot.com/o/chatData%2F8mLbSv4WS6LtbBmxjiaU%2FAngular-18.png?alt=media&token=6f66fa1f-4d99-4e35-89f9-b10af976b4eb',
       taggedUser: ['GvMTa8fbPnSDP3TTdDeA2ZdDshC2'],
-    };
+    });
   }
 
   /**
