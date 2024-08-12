@@ -90,7 +90,7 @@ export class InitUserService {
    */
   setUserObject(username?: string): User {
     const user = this.authService.firebaseAuth.currentUser!;
-    let userData = new User({
+    const userData = {
       userId: user.uid,
       name: username ? username : user.displayName ? user.displayName : 'Maxi Müller',
       status: true,
@@ -100,7 +100,7 @@ export class InitUserService {
       channels: ['yh1LXpvXcOWY2hZOEfZ2'],
       email: user.email ? user.email : 'MaxMustermann@gast.com',
       privateNoteRef: user.uid,
-    });
+    };
     return userData;
   }
 
