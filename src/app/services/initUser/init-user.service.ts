@@ -72,7 +72,10 @@ export class InitUserService {
   ];
 
   /**
-   * Sets initial database entries for the logged-in user.
+   * Sets the initial database entries for a user. This method creates a user document
+   * and a private notes document in Firestore with default values.
+   *
+   * @param {string} [username] - The optional username to set for the user document.
    * @returns {void}
    */
   setInitialDatabaseEntries(username?: string): void {
@@ -85,9 +88,12 @@ export class InitUserService {
   }
 
   /**
-   * Creates a user object for Firestore. (for every user registering with email and password & sets up example data)
-   * @param {string} [username] - Optional username for the user.
-   * @returns {Object} The user object.
+   * Creates a user object with the specified username or default values.
+   * This object is used to store user information in Firestore.
+   *
+   * @param {string} [username] - The optional username to set. If not provided,
+   *                              it will use the Firebase user's display name or a default name.
+   * @returns {User} The user object containing user data including userId, name, status, photoURL, channels, email, and privateNoteRef.
    */
   setUserObject(username?: string): User {
     const user = this.authService.firebaseAuth.currentUser!;
@@ -107,8 +113,9 @@ export class InitUserService {
 
   /**
    * Creates a private note object for the current user.
+   * This object is used to store a reference to the user's private notes in Firestore.
    *
-   * @returns {Object} An object containing the private chat ID and private note creator ID.
+   * @returns {PrivateNote} The private note object containing the privateNoteId and privateNoteCreator.
    */
   setPrivateNoteObject(): PrivateNote {
     const user = this.authService.firebaseAuth.currentUser!;
@@ -120,7 +127,8 @@ export class InitUserService {
   }
 
   /**
-   * Clears all data associated with a guest user then sets up example data for the guest user.
+   * Sets up example data for a guest user by clearing existing channels, private chats,
+   * and private notes associated with the guest user, and then setting up the guest user data.
    *
    * @returns {void}
    */
@@ -136,10 +144,11 @@ export class InitUserService {
   }
 
   /**
-   * Clears all channels associated with a guest user.
+   * Clears all channels associated with the guest user by removing the guest's messages
+   * and deleting the guest's membership in each channel which might got created.
    *
-   * @param {string} guestId - The ID of the guest user.
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @param {string} guestId - The ID of the guest user whose channels are to be cleared.
+   * @returns {Promise<void>} A promise that resolves when all guest channels and associated messages are cleared.
    */
   clearGuestChannels(guestId: string): Promise<void> {
     const qChannels = query(collection(this.firestore, 'channels'), where('members', 'array-contains', guestId));
@@ -158,10 +167,11 @@ export class InitUserService {
   }
 
   /**
-   * Clears all private chats associated with a guest user.
+   * Clears all private chats associated with the guest user by deleting all messages
+   * and their corresponding answers, and then removing the chat documents.
    *
-   * @param {string} guestId - The ID of the guest user.
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @param {string} guestId - The ID of the guest user whose private chats are to be cleared.
+   * @returns {Promise<void>} A promise that resolves when all guest private chats and associated messages are cleared.
    */
   clearGuestPrivateChats(guestId: string): Promise<void> {
     const qPrivateChats = query(
@@ -179,10 +189,11 @@ export class InitUserService {
   }
 
   /**
-   * Clears all private notes associated with a guest user.
+   * Clears all private notes associated with the guest user by deleting all messages
+   * and their corresponding answers within the guest's private notes document.
    *
-   * @param {string} guestId - The ID of the guest user.
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @param {string} guestId - The ID of the guest user whose private notes are to be cleared.
+   * @returns {Promise<void>} A promise that resolves when all messages and answers in the guest's private notes are deleted.
    */
   clearGuestPrivateNotes(guestId: string): Promise<void> {
     const promise = this.deleteAllMessagesWithAnswers(doc(this.firestore, 'privateNotes', guestId)).then(() => {});
@@ -190,9 +201,10 @@ export class InitUserService {
   }
 
   /**
-   * Sets up the guest user with initial data.
+   * Sets up data for a guest user by creating or updating the guest's user document,
+   * private notes document, and adding example private chats and channels.
    *
-   * @param {string} guestId - The ID of the guest user.
+   * @param {string} guestId - The ID of the guest user for whom the data is being set up.
    * @returns {void}
    */
   setGuest(guestId: string): void {
@@ -206,11 +218,12 @@ export class InitUserService {
   }
 
   /**
-   * Deletes messages sent by the guest user or the answers to those messages.
+   * Deletes a message document if it was sent by the guest user, or deletes the message's answers
+   * if it was sent by the guest user.
    *
-   * @param {string} guestId - The ID of the guest user.
-   * @param {QueryDocumentSnapshot} messagesDoc - The document snapshot of the message.
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @param {string} guestId - The ID of the guest user associated with the message.
+   * @param {QueryDocumentSnapshot} messagesDoc - The message document snapshot to be deleted or processed.
+   * @returns {Promise<void>} A promise that resolves when the message or its answers are deleted.
    */
   deleteGuestMessages(guestId: string, messagesDoc: QueryDocumentSnapshot): Promise<void> {
     let promise;
@@ -223,11 +236,12 @@ export class InitUserService {
   }
 
   /**
-   * Deletes answers sent by the guest user.
+   * Deletes all message answers associated with a given message that were sent by the guest user.
+   * It also updates the answer count of the message document after deleting the answers.
    *
-   * @param {string} guestId - The ID of the guest user.
-   * @param {QueryDocumentSnapshot} messagesDoc - The document snapshot of the message.
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @param {string} guestId - The ID of the guest user whose message answers are to be deleted.
+   * @param {QueryDocumentSnapshot} messagesDoc - The message document snapshot that contains the answers to be deleted.
+   * @returns {Promise<void>} A promise that resolves when all message answers are deleted and the answer count is updated.
    */
   deleteGuestAnswers(guestId: string, messagesDoc: QueryDocumentSnapshot): Promise<void> {
     const qMessageAnswers = query(collection(messagesDoc.ref, 'messageAnswers'), where('messageSendBy', '==', guestId));
@@ -243,11 +257,13 @@ export class InitUserService {
   }
 
   /**
-   * Deletes channels created by or containing the guest user.
+   * Removes the guest user from a channel's member list, and deletes the channel document
+   * if the guest user created it. Otherwise, updates the channel document to reflect the
+   * removal of the guest user.
    *
-   * @param {string} guestId - The ID of the guest user.
-   * @param {QueryDocumentSnapshot} channelDoc - The document snapshot of the channel.
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @param {string} guestId - The ID of the guest user to be removed from the channel.
+   * @param {QueryDocumentSnapshot} channelDoc - The channel document snapshot representing the channel to be updated or deleted.
+   * @returns {Promise<void>} A promise that resolves when the channel document is updated or deleted.
    */
   deleteGuestChannels(guestId: string, channelDoc: QueryDocumentSnapshot): Promise<void> {
     let members: string[] = channelDoc.get('members');
@@ -263,10 +279,10 @@ export class InitUserService {
   }
 
   /**
-   * Deletes all messages and their answers within a document.
+   * Deletes all messages and their associated answers from the specified document reference.
    *
-   * @param {DocumentReference} mainDoc - The document reference containing the messages.
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @param {DocumentReference} mainDoc - The reference to the main document containing messages and their answers.
+   * @returns {Promise<void>} A promise that resolves when all messages and their answers are deleted.
    */
   deleteAllMessagesWithAnswers(mainDoc: DocumentReference): Promise<void> {
     const promise = getDocs(collection(mainDoc, 'messages')).then((docs) => {
@@ -283,29 +299,25 @@ export class InitUserService {
   }
 
   /**
-   * Adds private chats between each demo user and the guest user, with individual messages.
+   * Adds example private chats for the guest user with predefined demo users.
+   * Creates private chat documents and associated messages in a Firestore batch operation.
    *
-   * @returns {Promise<void>} A promise that resolves when all operations are complete.
+   * @returns {Promise<void>} A promise that resolves when the batch operation to create private chats and messages is completed.
+   * @throws {Error} Throws an error if there is an issue committing the batch operation.
    */
   async addGuestExamplePrivateChat(): Promise<void> {
     const guestUserId = this.GuestUserID;
     const demoUserIds = this.DemoUser;
-
     const batch = writeBatch(this.firestore);
-
     demoUserIds.forEach((demoUserId) => {
-      const chatId = this.generateUniqueId(); // Generate a unique chat ID
-
+      const chatId = this.generateUniqueId();
       batch.set(doc(this.firestore, 'privateChats', chatId), this.setGuestPrivateChat(guestUserId, demoUserId));
-
       batch.set(
-        doc(this.firestore, 'privateChats', chatId, 'messages', this.generateUniqueId()), // Generate a unique message ID
+        doc(this.firestore, 'privateChats', chatId, 'messages', this.generateUniqueId()),
         this.setGuestPrivateMessage(chatId, demoUserId, guestUserId),
       );
     });
-
     try {
-      // Commit the batch
       await batch.commit();
     } catch (error) {
       console.warn('Error creating private chats and messages:', error);
@@ -313,9 +325,12 @@ export class InitUserService {
   }
 
   /**
-   * Adds an example channel for the guest user.
+   * Adds a guest channel to Firestore, including an initial message and thread messages with answers.
+   * This function sets up a channel document, creates a message within that channel,
+   * and adds thread messages and their answers.
    *
-   * @returns {Promise<void>} A promise that resolves when the operation is complete.
+   * @returns {Promise<void>} A promise that resolves when the channel, message, thread messages,
+   * and their answers have been successfully added to Firestore.
    */
   addGuestChannel(): Promise<void> {
     const ids = {
@@ -363,11 +378,12 @@ export class InitUserService {
   }
 
   /**
-   * Creates a private chat object for the guest user and a demo user.
+   * Creates a private chat object for a guest user with a demo user.
+   * This object is used to store the private chat information in Firestore.
    *
-   * @param {string} guestUserId - The ID of the guest user.
-   * @param {string} demoUserId - The ID of the demo user.
-   * @returns {Object} The private chat object.
+   * @param {string} guestUserId - The ID of the guest user who is the recipient of the private chat.
+   * @param {string} demoUserId - The ID of the demo user who is the creator of the private chat.
+   * @returns {PrivateChat} The private chat object containing the privateChatId, chatCreator, and chatReciver.
    */
   setGuestPrivateChat(guestUserId: string, demoUserId: string): PrivateChat {
     const privateChatData = {
@@ -379,14 +395,15 @@ export class InitUserService {
   }
 
   /**
-   * Creates a private message object for the guest user and a demo user.
+   * Creates a private message object for a chat between a sender and a recipient.
+   * This object is used to store message details in Firestore.
    *
-   * @param {string} chatId - The ID of the private chat.
+   * @param {string} chatId - The ID of the chat in which the message is sent.
    * @param {string} senderId - The ID of the user sending the message.
-   * @param {string} recipientId - The ID of the user receiving the message.
-   * @returns {Object} The private message object.
+   * @param {string} recipientId - The ID of the user tagged in the message.
+   * @returns {Message} The private message object containing message details.
    */
-  setGuestPrivateMessage(chatId: string, senderId: string, recipientId: string): Object {
+  setGuestPrivateMessage(chatId: string, senderId: string, recipientId: string): Message {
     const randomMessage = this.getRandomMessage();
     const newMessage = {
       answerCount: 0,
@@ -408,12 +425,13 @@ export class InitUserService {
   }
 
   /**
-   * Creates a channel object for the guest user.
+   * Creates a channel object for a guest user with a predefined set of demo users.
+   * This object is used to store channel details in Firestore.
    *
-   * @param {string} userId - The ID of the guest user.
-   * @returns {Object} The channel object.
+   * @param {string} userId - The ID of the guest user who is creating the channel.
+   * @returns {Channel} The channel object containing channel details.
    */
-  setGuestChannel(userId: string): Object {
+  setGuestChannel(userId: string): Channel {
     const members = [userId, ...this.DemoUser];
     const channelData = {
       chanId: '',
@@ -427,15 +445,16 @@ export class InitUserService {
   }
 
   /**
-   * Creates a message object for the guest user.
+   * Creates a message object for a given set of IDs. This object includes details about the message,
+   * such as its content, reactions, and metadata.
    *
-   * @param {Object} ids - The IDs for the message.
-   * @param {string} ids.userId - The ID of the guest user.
-   * @param {string} ids.channelId - The ID of the channel.
+   * @param {Object} ids - An object containing identifiers for the message and related entities.
+   * @param {string} ids.userId - The ID of the user sending the message.
+   * @param {string} ids.channelId - The ID of the channel in which the message is sent.
    * @param {string} ids.messageId - The ID of the message.
-   * @param {string} ids.initialThreadMessageId - The ID of the initial thread message.
-   * @param {string} ids.threadAnswerId - The ID of the thread answer.
-   * @returns {Object} The message object.
+   * @param {string} ids.initialThreadMessageId - The ID of the initial thread message (if applicable).
+   * @param {string} ids.threadAnswerId - The ID of the thread answer (if applicable).
+   * @returns {Message} The message object containing the message details, including text, reactions, and metadata.
    */
   setGuestMessage(ids: {
     userId: string;
@@ -477,15 +496,16 @@ export class InitUserService {
   }
 
   /**
-   * Creates a thread message object for the guest user.
+   * Creates a thread message answer object for a given set of IDs. This object includes details about the thread message,
+   * such as its content, reactions, and metadata.
    *
-   * @param {Object} ids - The IDs for the thread message.
-   * @param {string} ids.userId - The ID of the guest user.
-   * @param {string} ids.channelId - The ID of the channel.
-   * @param {string} ids.messageId - The ID of the message.
-   * @param {string} ids.initialThreadMessageId - The ID of the initial thread message.
-   * @param {string} ids.threadAnswerId - The ID of the thread answer.
-   * @returns {Object} The thread message object.
+   * @param {Object} ids - An object containing identifiers for the thread message and related entities.
+   * @param {string} ids.userId - The ID of the user sending the thread message answer.
+   * @param {string} ids.channelId - The ID of the channel where the thread message is located.
+   * @param {string} ids.messageId - The ID of the message to which the thread message answer is associated.
+   * @param {string} ids.initialThreadMessageId - The ID of the initial thread message being answered.
+   * @param {string} ids.threadAnswerId - The ID of the thread message answer.
+   * @returns {MessageAnswer} The thread message answer object containing the message answer details, including text, reactions, and metadata.
    */
   setGuestThreadMessage(ids: {
     userId: string;
@@ -519,15 +539,16 @@ export class InitUserService {
   }
 
   /**
-   * Creates a thread answer object for the guest user.
+   * Creates a thread message answer object for a given set of IDs. This object includes details about the thread message answer,
+   * such as its content, reactions, and metadata.
    *
-   * @param {Object} ids - The IDs for the thread answer.
-   * @param {string} ids.userId - The ID of the guest user.
-   * @param {string} ids.channelId - The ID of the channel.
-   * @param {string} ids.messageId - The ID of the message.
-   * @param {string} ids.initialThreadMessageId - The ID of the initial thread message.
-   * @param {string} ids.threadAnswerId - The ID of the thread answer.
-   * @returns {Object} The thread answer object.
+   * @param {Object} ids - An object containing identifiers for the thread message answer and related entities.
+   * @param {string} ids.userId - The ID of the user sending the thread message answer.
+   * @param {string} ids.channelId - The ID of the channel where the thread message is located.
+   * @param {string} ids.messageId - The ID of the message to which the thread message answer is associated.
+   * @param {string} ids.initialThreadMessageId - The ID of the initial thread message being answered.
+   * @param {string} ids.threadAnswerId - The ID of the thread message answer.
+   * @returns {MessageAnswer} The thread message answer object containing the answer details, including text, reactions, and metadata.
    */
   setGuestThreadAnswer(ids: {
     userId: string;
