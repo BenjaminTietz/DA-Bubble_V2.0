@@ -62,40 +62,84 @@ export class CommunicationService {
 
   constructor() {}
 
+  /**
+   * Toggles the visibility of a thread.
+   */
   toggleThreadVisibility() {
     this.isThreadVisible = !this.isThreadVisible;
   }
 
+  /**
+   * Toggles the visibility of the current user's profile.
+   *
+   * @param {boolean} visible - A boolean indicating whether the profile should be visible.
+   */
   toggleCurrentUserProfileVisibility(visible: boolean) {
     this.isCurrentUserProfileVisibleSource.next(visible);
   }
 
+  /**
+   * Toggles the visibility of a user profile.
+   *
+   * @param {boolean} visible - A boolean indicating whether the user profile should be visible.
+   */
   toggleUserProfileVisibility(visible: boolean) {
     this.isUserProfileVisibleSource.next(visible);
   }
 
+  /**
+   * Toggles the visibility of the channel details.
+   *
+   * @param {boolean} visible - A boolean indicating whether the channel details should be visible.
+   */
   toggleChannelDetailsVisibility(visible: boolean) {
     this.isChannelDetailsVisibleSource.next(visible);
   }
 
+  /**
+   * Toggles the visibility of the "Add Members to Channel" modal.
+   *
+   * @param {boolean} visible - A boolean indicating whether the modal should be visible.
+   */
   toggleAddMembersToChannelVisibility(visible: boolean) {
     this.isAddMembersToChannelVisibleSource.next(visible);
   }
 
+  /**
+   * Toggles the visibility of the channel members list.
+   *
+   * @param {boolean} visible - A boolean indicating whether the members list should be visible.
+   */
   toggleChannelMemberVisibility(visible: boolean) {
     this.isChannelMemberVisibleSource.next(visible);
   }
 
+  /**
+   * Handles the click event on a user, showing the user's profile.
+   *
+   * @param {string} memberId - The ID of the user whose profile should be displayed.
+   */
   handleClickOnUser(memberId: string) {
     this.toggleUserProfileVisibility(true);
     this.userProfileId = memberId;
   }
 
+  /**
+   * Handles the click event on the current user, toggling the visibility of the user's profile.
+   *
+   * @param {boolean} visible - A boolean indicating whether the current user's profile should be visible.
+   */
   handleClickCurrentUser(visible: boolean) {
     this.toggleCurrentUserProfileVisibility(visible);
   }
 
-  // mobile view functions
+  /**
+   * Toggles the visibility of the mobile user menu.
+   *
+   * This method switches the visibility state of the mobile user menu
+   * between visible and hidden.
+   */
+
   toggleMobileUserMenu() {
     this.isMobileUserMenuVisible = !this.isMobileUserMenuVisible;
   }
@@ -121,12 +165,27 @@ export class CommunicationService {
     }
   }
 
+  /**
+   * Toggles the visibility of the side navigation, thread, and router outlet on mobile devices.
+   *
+   * This method switches the visibility state of the side navigation, thread,
+   * and router outlet between visible and hidden.
+   */
   toggleSideNavMobile() {
     this.isSidenavVisible = !this.isSidenavVisible;
     this.isThreadVisible = !this.isThreadVisible;
     this.isRouterOutletVisible = !this.isRouterOutletVisible;
   }
 
+  /**
+   * Closes the mobile menu popup overlay with a specific animation.
+   *
+   * This method hides the mobile user menu by adding a 'hide' class, and after a
+   * delay, sets the visibility to false and removes the 'hide' class for future use.
+   *
+   * @param {string} menu - The name of the menu to be closed. If the menu is 'mobileUserMenu',
+   *                        the corresponding menu content will be hidden with an animation.
+   */
   closeMobileMenuPopupOverlay(menu: string) {
     if (menu === 'mobileUserMenu') {
       const menuContent = document.querySelector('.mobile-user-menu-content');
