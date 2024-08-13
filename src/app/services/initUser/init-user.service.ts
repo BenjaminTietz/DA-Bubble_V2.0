@@ -69,8 +69,14 @@ export class InitUserService {
     'Max, hast du das Protokoll des letzten Meetings erhalten?',
     'Morgen um 16:00 Uhr ist unser Meeting.',
     'Kannst du mir bitte helfen?',
+    'Hier ist die Angular Dokumentation als PDF.',
+    'Bitte nutze ab sofort Angular 18.',
   ];
 
+  examplePdfUrl =
+    'https://firebasestorage.googleapis.com/v0/b/da-bubble-v2.appspot.com/o/chatData%2FselUN2vXEM4O52xISOL3%2FEbook_The_Ultimate_Guide_to_Angular_Evolution.pdf?alt=media&token=b87a837e-7670-4c5d-b964-848f2fdaf0a2';
+  exampleImgUrl =
+    'https://firebasestorage.googleapis.com/v0/b/da-bubble-v2.appspot.com/o/chatData%2F8mLbSv4WS6LtbBmxjiaU%2FAngular-18.png?alt=media&token=6f66fa1f-4d99-4e35-89f9-b10af976b4eb';
   /**
    * Sets the initial database entries for a user. This method creates a user document
    * and a private notes document in Firestore with default values.
@@ -405,6 +411,12 @@ export class InitUserService {
    */
   setGuestPrivateMessage(chatId: string, senderId: string, recipientId: string): Message {
     const randomMessage = this.getRandomMessage();
+    let storageData = '';
+    if (randomMessage === 'Hier ist die Angular Dokumentation als PDF.') {
+      storageData = this.examplePdfUrl;
+    } else if (randomMessage === 'Bitte nutze ab sofort Angular 18.') {
+      storageData = this.exampleImgUrl;
+    }
     const newMessage = {
       answerCount: 0,
       chatId: chatId,
@@ -415,7 +427,7 @@ export class InitUserService {
       messageId: this.generateUniqueId(),
       messageSendBy: senderId,
       reactions: [],
-      storageData: '',
+      storageData: storageData,
       taggedUser: [recipientId],
       text: randomMessage,
       threadId: '',
